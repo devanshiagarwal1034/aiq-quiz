@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AIQ — AI Quiz & Trivia | Test Your Artificial Intelligence Knowledge</title>
+
+<!-- SEO Meta Tags -->
+<meta name="description" content="AIQ is a free daily AI quiz and trivia game. Test your knowledge of artificial intelligence, LLMs, AI tools, AI history, and more. New questions every day. No signup needed.">
+<meta name="keywords" content="AI quiz, AI trivia, artificial intelligence quiz, AI knowledge test, LLM quiz, ChatGPT quiz, machine learning trivia, AI game, daily AI quiz, tech trivia, AI IQ test">
+<meta name="author" content="AIQ">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://devanshiagarwal1034.github.io/aiq-quiz/">
+
+<!-- Open Graph (WhatsApp, Facebook, LinkedIn previews) -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="AIQ — How deep does your AI knowledge go?">
+<meta property="og:description" content="Free daily AI quiz. Test yourself on AI history, tools, concepts, numbers and logos. New questions every day. No signup needed.">
+<meta property="og:url" content="https://devanshiagarwal1034.github.io/aiq-quiz/">
+<meta property="og:site_name" content="AIQ — AI Quiz & Trivia">
+
+<!-- Additional SEO -->
+<meta name="theme-color" content="#4F6EF7">
+
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=DM+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#F0F4FF;--bg2:#E8EEFF;--surface:#FFFFFF;--surface2:#F6F8FF;--border:rgba(100,120,220,0.14);--border-strong:rgba(100,120,220,0.28);--ink:#0D1240;--ink2:#3A4080;--ink3:#8890CC;--accent:#4F6EF7;--accent2:#7B5FF5;--accent-light:#EEF1FF;--accent-glow:rgba(79,110,247,0.15);--green:#00C48C;--green-bg:#EDFAF5;--green-border:rgba(0,196,140,0.35);--red:#F04E37;--red-bg:#FFF0EE;--red-border:rgba(240,78,55,0.3);--gold:#F5A623;--r:16px;--rs:10px;--shadow:0 4px 24px rgba(79,110,247,0.10);--shadow-md:0 8px 40px rgba(79,110,247,0.14);--transition:all 0.22s cubic-bezier(0.4,0,0.2,1);}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);min-height:100vh;overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;background:radial-gradient(ellipse 60% 50% at 80% 10%,rgba(123,95,245,0.08) 0%,transparent 60%),radial-gradient(ellipse 50% 60% at 10% 80%,rgba(79,110,247,0.07) 0%,transparent 60%),radial-gradient(ellipse 40% 40% at 50% 50%,rgba(255,255,255,0.6) 0%,transparent 70%);}
+body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;background-image:linear-gradient(rgba(79,110,247,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(79,110,247,0.04) 1px,transparent 1px);background-size:40px 40px;}
+.screen{display:none;position:relative;z-index:1;}
+.screen.active{display:flex;flex-direction:column;align-items:center;min-height:100vh;padding:2rem 1rem 6rem;}
+.wordmark{display:inline-flex;align-items:center;gap:8px;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:1.05rem;letter-spacing:0.04em;color:var(--accent);margin-bottom:1rem;}
+.wordmark-dot{width:8px;height:8px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));animation:pulse 2.5s ease-in-out infinite;}
+@keyframes pulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(0.6);opacity:0.5}}
+.wordmark-badge{font-family:'JetBrains Mono',monospace;font-size:0.62rem;font-weight:600;background:var(--accent-light);color:var(--accent);padding:2px 8px;border-radius:6px;letter-spacing:0.06em;}
+h1.hero{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(2rem,6vw,3rem);line-height:1.1;letter-spacing:-0.025em;color:var(--ink);text-align:center;margin-bottom:0.5rem;}
+h1.hero .accent{background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.hero-sub{font-size:0.95rem;color:var(--ink3);text-align:center;font-weight:400;}
+.card{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--r);padding:1.75rem;box-shadow:var(--shadow);width:100%;max-width:520px;}
+.sec-label{font-family:'Space Grotesk',sans-serif;font-size:0.7rem;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:var(--ink3);display:flex;align-items:center;gap:8px;margin-bottom:1rem;}
+.sec-label::after{content:'';flex:1;height:1px;background:var(--border);}
+.txt-input{width:100%;padding:0.85rem 1rem;font-family:'Space Grotesk',sans-serif;font-weight:500;font-size:0.95rem;background:var(--surface2);border:1.5px solid var(--border);border-radius:var(--rs);color:var(--ink);outline:none;transition:var(--transition);margin-bottom:0.9rem;}
+.txt-input:focus{border-color:var(--accent);background:#fff;box-shadow:0 0 0 3px var(--accent-glow);}
+.txt-input::placeholder{color:var(--ink3);font-weight:400;}
+.btn{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:0.88rem;letter-spacing:0.03em;padding:0.8rem 1.5rem;border:none;border-radius:50px;cursor:pointer;transition:var(--transition);display:inline-flex;align-items:center;gap:0.45rem;}
+.btn:active{transform:scale(0.97);}
+.btn-primary{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;width:100%;justify-content:center;font-size:0.95rem;padding:0.9rem;box-shadow:0 4px 16px rgba(79,110,247,0.3);}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(79,110,247,0.4);}
+.btn-outline{background:transparent;color:var(--ink2);border:1.5px solid var(--border-strong);flex:1;justify-content:center;}
+.btn-outline:hover{background:var(--accent-light);border-color:var(--accent);color:var(--accent);}
+.divider{width:100%;height:1px;background:var(--border);margin:1.25rem 0;}
+.flex-btns{display:flex;gap:0.6rem;}
+.cat-grid{display:grid;grid-template-columns:1fr 1fr;gap:0.65rem;margin-bottom:0.65rem;}
+.cat-card{background:var(--surface2);border:1.5px solid var(--border);border-radius:var(--r);padding:1.1rem 0.9rem;cursor:pointer;transition:var(--transition);display:flex;flex-direction:column;align-items:flex-start;gap:0.5rem;text-align:left;}
+.cat-card:hover{background:#fff;border-color:var(--accent);box-shadow:0 4px 20px var(--accent-glow);transform:translateY(-3px);}
+.cat-card:active{transform:scale(0.98) translateY(0);}
+.cat-icon-wrap{width:38px;height:38px;border-radius:10px;background:var(--accent-light);display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;}
+.cat-card:hover .cat-icon-wrap{background:var(--accent);}
+.cat-name{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:0.85rem;color:var(--ink);line-height:1.2;}
+.cat-desc{font-size:0.75rem;color:var(--ink3);font-weight:400;line-height:1.3;}
+.cat-pill{font-family:'JetBrains Mono',monospace;font-size:0.62rem;font-weight:600;background:var(--accent-light);color:var(--accent);padding:2px 8px;border-radius:6px;margin-top:auto;align-self:flex-start;}
+.streak-badge{display:inline-flex;align-items:center;gap:6px;background:var(--ink);color:#fff;padding:6px 14px;border-radius:50px;font-family:'Space Grotesk',sans-serif;font-size:0.78rem;font-weight:600;}
+.date-badge{display:inline-flex;align-items:center;gap:6px;background:var(--accent-light);color:var(--accent);padding:4px 12px;border-radius:50px;font-family:'JetBrains Mono',monospace;font-size:0.72rem;font-weight:600;margin-bottom:1.1rem;border:1px solid var(--border-strong);}
+.quiz-header{width:100%;max-width:520px;display:flex;justify-content:space-between;align-items:center;margin-bottom:0.8rem;}
+.q-cat-tag{font-family:'Space Grotesk',sans-serif;font-size:0.72rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent);}
+.q-score-tag{font-family:'JetBrains Mono',monospace;font-weight:600;font-size:0.82rem;background:var(--ink);color:#fff;padding:4px 12px;border-radius:50px;}
+.progress-track{width:100%;max-width:520px;height:4px;background:var(--border);border-radius:10px;margin-bottom:1.25rem;overflow:hidden;}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:10px;transition:width 0.5s cubic-bezier(0.4,0,0.2,1);}
+.q-label{font-family:'JetBrains Mono',monospace;font-size:0.68rem;font-weight:600;color:var(--ink3);margin-bottom:0.65rem;letter-spacing:0.04em;}
+.q-text{font-family:'Space Grotesk',sans-serif;font-size:1.1rem;font-weight:500;line-height:1.6;color:var(--ink);margin-bottom:1rem;}
+.opts{display:flex;flex-direction:column;gap:0.5rem;}
+.opt-btn{width:100%;padding:0.8rem 1rem;background:var(--surface2);border:1.5px solid var(--border);border-radius:var(--rs);text-align:left;font-family:'DM Sans',sans-serif;font-size:0.93rem;font-weight:500;color:var(--ink);cursor:pointer;transition:var(--transition);display:flex;align-items:center;gap:0.75rem;}
+.opt-btn:hover:not(:disabled){background:#fff;border-color:var(--accent);box-shadow:0 2px 12px var(--accent-glow);transform:translateX(4px);}
+.opt-btn:disabled{cursor:default;}
+.opt-key{width:26px;height:26px;border-radius:7px;flex-shrink:0;background:var(--border);color:var(--ink2);display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:0.7rem;font-weight:600;transition:var(--transition);}
+.opt-btn.correct{background:var(--green-bg);border-color:var(--green-border);color:var(--green);}
+.opt-btn.correct .opt-key{background:var(--green);color:#fff;}
+.opt-btn.wrong{background:var(--red-bg);border-color:var(--red-border);color:var(--red);}
+.opt-btn.wrong .opt-key{background:var(--red);color:#fff;}
+/* Logo display */
+.logo-stage{width:100%;background:var(--surface2);border:1.5px solid var(--border);border-radius:var(--r);display:flex;align-items:center;justify-content:center;padding:1.8rem 1rem;margin-bottom:0.6rem;min-height:140px;position:relative;overflow:hidden;}
+.logo-stage::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 80% at 50% 50%,rgba(79,110,247,0.05),transparent);}
+.logo-stage>*{position:relative;z-index:1;}
+.logo-prompt{font-family:'JetBrains Mono',monospace;font-size:0.65rem;font-weight:600;color:var(--ink3);text-align:center;margin-bottom:0.9rem;letter-spacing:0.1em;text-transform:uppercase;}
+.feedback-toast{position:fixed;bottom:5.5rem;left:50%;transform:translateX(-50%) translateY(20px);background:var(--surface);border:1.5px solid var(--border);border-radius:12px;padding:10px 18px;font-family:'Space Grotesk',sans-serif;font-size:0.85rem;font-weight:600;color:var(--ink2);display:none;box-shadow:var(--shadow-md);z-index:100;max-width:88vw;text-align:center;}
+@keyframes toastIn{from{opacity:0;transform:translateX(-50%) translateY(20px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+.feedback-toast.show{display:block;animation:toastIn 0.3s cubic-bezier(0.34,1.56,0.64,1) forwards;}
+.feedback-toast.ok{background:var(--green-bg);border-color:var(--green-border);color:var(--green);}
+.feedback-toast.fail{background:var(--red-bg);border-color:var(--red-border);color:var(--red);}
+.result-grade{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:0.75rem;letter-spacing:0.16em;text-transform:uppercase;color:var(--ink3);margin-bottom:0.4rem;text-align:center;}
+.result-score{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:5.5rem;line-height:1;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;text-align:center;}
+.result-score sup{font-size:2.2rem;opacity:0.5;-webkit-text-fill-color:var(--ink3);}
+.result-quote{font-size:0.93rem;color:var(--ink3);font-style:italic;margin-bottom:1.25rem;text-align:center;}
+.stat-row{display:flex;justify-content:space-between;align-items:center;padding:0.6rem 0;border-bottom:1px solid var(--border);font-size:0.9rem;}
+.stat-row:last-child{border:none;}
+.stat-key{color:var(--ink3);font-weight:400;}
+.stat-val{font-family:'Space Grotesk',sans-serif;font-weight:600;color:var(--ink);}
+.lb-row{display:flex;align-items:center;gap:0.75rem;padding:0.8rem 1rem;border-radius:var(--rs);background:var(--surface2);margin-bottom:0.4rem;border:1.5px solid transparent;animation:slideUp 0.35s ease both;}
+.lb-row.me{background:var(--accent-light);border-color:var(--accent);}
+@keyframes slideUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.lb-rank{width:28px;height:28px;border-radius:8px;background:var(--border);color:var(--ink2);display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-weight:600;font-size:0.75rem;flex-shrink:0;}
+.lb-row:nth-child(1) .lb-rank{background:var(--gold);color:#fff;}
+.lb-row:nth-child(2) .lb-rank{background:#B0B8CC;color:#fff;}
+.lb-row:nth-child(3) .lb-rank{background:#CD8040;color:#fff;}
+.lb-nick{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:0.88rem;display:block;}
+.lb-cat{font-size:0.73rem;color:var(--ink3);margin-top:1px;display:block;}
+.lb-pts{font-family:'JetBrains Mono',monospace;font-weight:600;font-size:0.9rem;color:var(--accent);margin-left:auto;flex-shrink:0;}
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;background:rgba(255,255,255,0.95);border-top:1px solid var(--border);backdrop-filter:blur(16px);display:none;justify-content:center;gap:0.4rem;padding:0.55rem 1rem 1rem;z-index:80;}
+.nav-btn{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:0.72rem;letter-spacing:0.03em;color:var(--ink3);background:none;border:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 20px;border-radius:10px;transition:var(--transition);min-width:70px;}
+.nav-btn:hover,.nav-btn.active{color:var(--accent);background:var(--accent-light);}
+.nav-icon{font-size:1.1rem;}
+.setup-panel{background:var(--surface2);border:1.5px solid var(--border);border-radius:var(--rs);padding:1rem;margin-bottom:1rem;display:none;}
+.setup-note{font-size:0.78rem;color:var(--ink3);line-height:1.5;margin-bottom:0.75rem;}
+.setup-note code{font-family:'JetBrains Mono',monospace;background:var(--border);padding:2px 5px;border-radius:4px;font-size:0.72rem;}
+.confetti-wrap{position:fixed;inset:0;pointer-events:none;z-index:200;overflow:hidden;}
+.c-dot{position:absolute;border-radius:3px;animation:confFall linear forwards;}
+@keyframes confFall{0%{transform:translateY(-30px) rotate(0deg);opacity:1}100%{transform:translateY(110vh) rotate(720deg);opacity:0}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeDown{from{opacity:0;transform:translateY(-12px)}to{opacity:1;transform:translateY(0)}}
+.au{animation:fadeUp 0.45s ease both;}
+.spinner{width:28px;height:28px;border:2.5px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin 0.7s linear infinite;margin:1rem auto;}
+@keyframes spin{to{transform:rotate(360deg)}}
+.info-note{font-size:0.78rem;color:var(--ink3);text-align:center;margin-top:0.75rem;font-weight:400;}
+</style>
+</head>
+<body>
+
+<div id="screen-home" class="screen active">
+  <div style="text-align:center;margin-bottom:1.75rem;animation:fadeDown 0.5s ease both">
+    <div style="display:inline-flex;align-items:center;justify-content:center;margin-bottom:0.55rem;">
+      <div style="background:linear-gradient(135deg,var(--accent),var(--accent2));border-radius:50%;width:65px;height:65px;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 24px rgba(79,110,247,0.25);">
+        <span style="font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:1.2rem;letter-spacing:0.06em;color:#fff;line-height:1;">AIQ</span>
+      </div>
+    </div>
+    <div style="display:inline-flex;align-items:center;gap:8px;font-family:'JetBrains Mono',monospace;font-size:0.68rem;font-weight:600;color:var(--ink3);margin-bottom:0.9rem;background:var(--accent-light);border:1px solid var(--border-strong);padding:3px 12px;border-radius:50px;">
+      <span style="color:var(--accent)">AI</span><span>+</span><span style="color:var(--accent2)">IQ</span><span style="opacity:0.4">→</span><span>Artificial Intelligence Quotient</span>
+    </div>
+    <p style="font-family:'Space Grotesk',sans-serif;font-size:clamp(1.1rem,4vw,1.35rem);font-weight:600;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1.4;margin-bottom:0.4rem;">The machines are learning.<br>Are you?</p>
+    <p class="hero-sub">Daily questions · Leaderboard · No signup needed</p>
+  </div>
+  <div class="card au" style="animation-delay:0.1s">
+    <div class="sec-label">Enter the Arena</div>
+    <input type="text" class="txt-input" id="nick-input" placeholder="Enter a nickname to get started..." maxlength="20" autocomplete="off">
+
+    <button class="btn btn-primary" onclick="startFromHome()">Start Playing →</button>
+    <div class="divider"></div>
+    <div class="flex-btns">
+      <button class="btn btn-outline" onclick="showLeaderboard()">🏆 Leaderboard</button>
+    </div>
+    <p class="info-note">No tracking. No account. Just AI trivia.</p>
+  </div>
+</div>
+
+<div id="screen-categories" class="screen">
+  <div style="text-align:center;margin-bottom:1.4rem;animation:fadeDown 0.4s ease both">
+    <div class="wordmark"><div class="wordmark-dot"></div>AIQ</div>
+    <h1 class="hero" style="font-size:2rem">Choose <span class="accent">Category</span></h1>
+  </div>
+  <div class="card au" style="max-width:520px;animation-delay:0.05s">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;flex-wrap:wrap;gap:0.5rem">
+      <div class="date-badge">📅 <span id="today-date"></span></div>
+      <div class="streak-badge">🔥 <span id="streak-num">0</span> day streak</div>
+    </div>
+    <div class="sec-label">Pick a Category</div>
+    <div class="cat-grid">
+      <button class="cat-card" onclick="startQuiz('history')">
+        <div class="cat-icon-wrap">📜</div>
+        <div class="cat-name">AI History</div>
+        <div class="cat-desc">Milestones &amp; pioneers</div>
+        <div class="cat-pill">10 Qs · Daily</div>
+      </button>
+      <button class="cat-card" onclick="startQuiz('concepts')">
+        <div class="cat-icon-wrap">🧠</div>
+        <div class="cat-name">AI Concepts</div>
+        <div class="cat-desc">LLMs, GANs, transformers</div>
+        <div class="cat-pill">10 Qs · Daily</div>
+      </button>
+      <button class="cat-card" onclick="startQuiz('tools')">
+        <div class="cat-icon-wrap">🔧</div>
+        <div class="cat-name">AI Tools</div>
+        <div class="cat-desc">ChatGPT, Claude &amp; beyond</div>
+        <div class="cat-pill">10 Qs · Daily</div>
+      </button>
+      <button class="cat-card" onclick="startQuiz('numbers')">
+        <div class="cat-icon-wrap">📊</div>
+        <div class="cat-name">Wild Numbers</div>
+        <div class="cat-desc">Parameters, funding, stats</div>
+        <div class="cat-pill">10 Qs · Daily</div>
+      </button>
+      <button class="cat-card" onclick="startQuiz('logos')">
+        <div class="cat-icon-wrap">🎨</div>
+        <div class="cat-name">Spot the Logo</div>
+        <div class="cat-desc">Identify AI brands visually</div>
+        <div class="cat-pill">10 Qs · Visual</div>
+      </button>
+      <button class="cat-card" onclick="startQuiz('misc')">
+        <div class="cat-icon-wrap">🎲</div>
+        <div class="cat-name">Misc Mix</div>
+        <div class="cat-desc">Random from all topics</div>
+        <div class="cat-pill">10 Qs · Daily</div>
+      </button>
+    </div>
+    <p class="info-note" style="margin-top:0.5rem">New questions every day at midnight 🌙</p>
+  </div>
+</div>
+
+<div id="screen-quiz" class="screen">
+  <div class="quiz-header">
+    <span class="q-cat-tag" id="q-cat-label">AI HISTORY</span>
+    <span class="q-score-tag">⭐ <span id="live-score">0</span></span>
+  </div>
+  <div class="progress-track"><div class="progress-fill" id="prog-fill" style="width:10%"></div></div>
+  <div class="card au" id="q-card">
+    <div class="q-label" id="q-label">Q 01 / 10</div>
+    <div id="logo-area" style="display:none">
+      <div class="logo-stage" id="logo-display"></div>
+      <p class="logo-prompt">👆 Which company owns this logo?</p>
+    </div>
+    <p class="q-text" id="q-text"></p>
+    <div class="opts" id="opts-grid"></div>
+  </div>
+  <div class="feedback-toast" id="feedback-toast"></div>
+</div>
+
+<div id="screen-result" class="screen">
+  <div style="text-align:center;margin-bottom:0.75rem;animation:fadeDown 0.4s ease both">
+    <div class="wordmark"><div class="wordmark-dot"></div>AIQ</div>
+  </div>
+  <div class="card au" style="animation-delay:0.08s">
+    <div class="result-grade" id="result-grade">GREAT JOB</div>
+    <div class="result-score"><span id="result-num">0</span><sup>/10</sup></div>
+    <p class="result-quote" id="result-quote">Nice work!</p>
+    <div class="divider"></div>
+    <div class="stat-row"><span class="stat-key">Category</span><span class="stat-val" id="res-cat">—</span></div>
+    <div class="stat-row"><span class="stat-key">Correct answers</span><span class="stat-val" id="res-correct">—</span></div>
+    <div class="stat-row"><span class="stat-key">Accuracy</span><span class="stat-val" id="res-accuracy">—</span></div>
+    <div class="stat-row"><span class="stat-key">Points earned</span><span class="stat-val" id="res-pts">—</span></div>
+    <div class="divider"></div>
+    <div class="flex-btns">
+      <button class="btn btn-primary" onclick="goCategories()">Play Again →</button>
+      <button class="btn btn-outline" onclick="showLeaderboard()">🏆 Board</button>
+    </div>
+  </div>
+  <div class="confetti-wrap" id="confetti"></div>
+</div>
+
+<div id="screen-leaderboard" class="screen">
+  <div style="text-align:center;margin-bottom:1.4rem;animation:fadeDown 0.4s ease both">
+    <div class="wordmark"><div class="wordmark-dot"></div>AIQ</div>
+    <h1 class="hero" style="font-size:2rem">🏆 <span class="accent">Leaderboard</span></h1>
+    <p class="hero-sub" id="lb-subtitle">Today's top players</p>
+  </div>
+  <div style="width:100%;max-width:520px" class="au">
+    <div class="sec-label">Rankings</div>
+    <div id="lb-list"></div>
+    <div id="lb-loading" style="display:none"><div class="spinner"></div></div>
+    <div class="divider"></div>
+    <button class="btn btn-primary" onclick="goCategories()">Play Now →</button>
+  </div>
+</div>
+
+<div class="bottom-nav" id="bottom-nav">
+  <button class="nav-btn" id="nav-play" onclick="goCategories()"><span class="nav-icon">🎮</span>Play</button>
+  <button class="nav-btn" id="nav-home" onclick="showScreen('home')"><span class="nav-icon">🏠</span>Home</button>
+  <button class="nav-btn" id="nav-board" onclick="showLeaderboard()"><span class="nav-icon">🏆</span>Board</button>
+</div>
+
+<script>
+const S={nick:'',cat:'',qIdx:0,score:0,answered:false,qs:[],streak:+localStorage.getItem('aiku_streak')||0,lastDay:localStorage.getItem('aiku_last')||'',jbKey:localStorage.getItem('aiku_jbkey')||'$2a$10$F0k8bAswd2ZbQQ86JXxmA.QAR./hd4IKQZ65BVWMPrKIDUfR10SUa',jbId:localStorage.getItem('aiku_jbid')||'69d29191856a682189007de7'};
+function dateStr(){return new Date().toISOString().split('T')[0];}
+function seededRng(seed){let s=seed>>>0;return()=>{s=(Math.imul(s,1664525)+1013904223)>>>0;return s/0xFFFFFFFF};}
+function hashStr(str){let h=2166136261>>>0;for(let i=0;i<str.length;i++){h^=str.charCodeAt(i);h=Math.imul(h,16777619)>>>0;}return h;}
+function seededShuffle(arr,seed){const a=[...arr];const rng=seededRng(seed);for(let i=a.length-1;i>0;i--){const j=Math.floor(rng()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function getDailyQuestions(cat){
+  const seed=hashStr(dateStr()+':'+cat);
+  if(cat==='misc'){const cats=['history','concepts','tools','numbers','logos'];let pool=[];cats.forEach(c=>{pool.push(...seededShuffle(QUESTIONS[c],hashStr(dateStr()+':misc:'+c)).slice(0,2));});return seededShuffle(pool,seed);}
+  return seededShuffle(QUESTIONS[cat],seed).slice(0,10);
+}
+const JB='https://api.jsonbin.io/v3';
+async function lbFetch(){if(!S.jbKey||!S.jbId)return null;try{const r=await fetch(`${JB}/b/${S.jbId}/latest`,{headers:{'X-Master-Key':S.jbKey}});if(!r.ok)return null;return(await r.json()).record?.entries||[];}catch{return null;}}
+async function lbSave(e){if(!S.jbKey||!S.jbId)return;try{const cur=await lbFetch()||[];cur.push(e);cur.sort((a,b)=>b.pts-a.pts||b.score-a.score);await fetch(`${JB}/b/${S.jbId}`,{method:'PUT',headers:{'Content-Type':'application/json','X-Master-Key':S.jbKey},body:JSON.stringify({entries:cur.slice(0,50)})});}catch(e){}}
+let localLB=JSON.parse(localStorage.getItem('aiku_lb')||'[]');
+function saveLocal(e){localLB.push(e);localLB.sort((a,b)=>b.pts-a.pts||b.score-a.score);localLB=localLB.slice(0,30);localStorage.setItem('aiku_lb',JSON.stringify(localLB));}
+const FB_OK=["✅ Nailed it!","🔥 You knew!","⭐ Spot on!","🎯 Correct!","🤩 Boom!","✨ Perfect!","💡 Yes!","🏆 On fire!","🌟 Brilliant!","🎉 Exactly right!","🚀 Got it!","😎 Easy work!","💎 Flawless!","🧬 Sharp brain!","⚡ Instant recall!"];
+const FB_NO=["❌ Not quite!","😬 Nope!","💀 Wrong one!","🧠 Close miss!","😅 Nearly there!","🤖 Error detected!","📚 Learn that!","😤 Not it!","🌱 Keep going!","💪 Try harder!","🎭 Bold miss!","😂 Nah!","🫠 Wrong!","🐦 Not quite!","🔮 Off target!"];
+function getResultQuote(score,nick){const r=n=>Math.floor(Math.random()*n);if(score===10)return[`${nick}, you are built different. You might literally BE the training data.`,`Flawless, ${nick}! Turing would be proud. Or jealous.`,`10/10?! ${nick}, are you a GPT wrapper with a human-shaped username?`,`${nick} = 100% accuracy. Silicon Valley would like to acquire you.`][r(4)];if(score>=8)return[`Almost perfect, ${nick}! Those ${10-score} misses slipped like hallucinated facts.`,`Solid work, ${nick}. You clearly know your AI.`,`${nick}, the leaderboard trembles in your presence.`,`${nick}, 8–9 is the 'I read the papers' score. Respect.`][r(4)];if(score>=6)return[`Not bad, ${nick}! You passed the vibe check.`,`${nick}, 6–7 is the "AI Twitter expert" score. Go deeper!`,`You're in the middle of the bell curve, ${nick}. Time to escape it.`,`${nick}, you know enough to sound smart at parties.`][r(4)];if(score>=3)return[`${nick}, the AI revolution will not wait. Study up! 📚`,`Welp, ${nick}. At least you tried harder than most enterprise AI.`,`${nick}, that score is... a starting point. A humble one.`,`${nick}, even a random generator gets 2.5/10. You beat it. Slightly.`][r(4)];return[`${nick}, this score is proof AI education is urgently needed.`,`Rough one, ${nick}. Nowhere to go but up. Statistically.`,`${nick}, we believe in you. Not based on this quiz, but in general.`,`${nick}, a coin flip gets 5/10. But coins can't learn. You can.`][r(4)];}
+function showScreen(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById('screen-'+id).classList.add('active');document.getElementById('bottom-nav').style.display=['categories','quiz','result','leaderboard'].includes(id)?'flex':'none';['play','home','board'].forEach(n=>document.getElementById('nav-'+n).classList.remove('active'));if(id==='categories')document.getElementById('nav-play').classList.add('active');if(id==='home')document.getElementById('nav-home').classList.add('active');if(id==='leaderboard')document.getElementById('nav-board').classList.add('active');window.scrollTo(0,0);}
+function goCategories(){if(!S.nick){showScreen('home');return;}updateStreak();document.getElementById('streak-num').textContent=S.streak;document.getElementById('today-date').textContent=dateStr();showScreen('categories');}
+function startFromHome(){const nick=document.getElementById('nick-input').value.trim();if(!nick){const i=document.getElementById('nick-input');i.style.borderColor='var(--red)';i.style.boxShadow='0 0 0 3px rgba(240,78,55,0.12)';i.placeholder='A nickname! Any name. Even just "Bob".';setTimeout(()=>{i.style.borderColor='';i.style.boxShadow='';i.placeholder='Enter a nickname to get started...';},2200);return;}S.nick=nick;goCategories();}
+function toggleSetup(){}
+function updateStreak(){const today=dateStr();if(S.lastDay===today)return;const yesterday=new Date(Date.now()-86400000).toISOString().split('T')[0];S.streak=(S.lastDay===yesterday)?S.streak+1:1;S.lastDay=today;localStorage.setItem('aiku_streak',S.streak);localStorage.setItem('aiku_last',today);}
+const CAT_LABELS={history:'AI HISTORY',concepts:'AI CONCEPTS',tools:'AI TOOLS',numbers:'WILD NUMBERS',logos:'SPOT THE LOGO',misc:'MISC MIX'};
+const CAT_NAMES={history:'AI History',concepts:'AI Concepts',tools:'AI Tools',numbers:'Wild Numbers',logos:'Spot the Logo',misc:'Misc Mix'};
+function startQuiz(cat){S.cat=cat;S.qIdx=0;S.score=0;S.answered=false;S.qs=getDailyQuestions(cat);document.getElementById('q-cat-label').textContent=CAT_LABELS[cat];document.getElementById('live-score').textContent='0';showScreen('quiz');renderQ();}
+function renderQ(){
+  const q=S.qs[S.qIdx];
+  const n=S.qIdx+1,tot=S.qs.length;
+  document.getElementById('q-label').textContent='Q '+(n<10?'0'+n:n)+' / '+tot;
+  document.getElementById('prog-fill').style.width=(n/tot*100)+'%';
+  const logoArea=document.getElementById('logo-area');
+  const qText=document.getElementById('q-text');
+  if(q.logo){
+    logoArea.style.display='block';
+    document.getElementById('logo-display').innerHTML=q.logo;
+    qText.style.display='none';
+  } else {
+    logoArea.style.display='none';
+    qText.style.display='block';
+    qText.textContent=q.q;
+  }
+  const grid=document.getElementById('opts-grid');
+  grid.innerHTML='';
+  ['A','B','C','D'].forEach((l,i)=>{
+    const btn=document.createElement('button');
+    btn.className='opt-btn';
+    btn.innerHTML='<span class="opt-key">'+l+'</span>'+q.opts[i];
+    btn.onclick=()=>answer(i,btn);
+    grid.appendChild(btn);
+  });
+  S.answered=false;hideToast();
+  const card=document.getElementById('q-card');
+  card.style.animation='none';void card.offsetWidth;card.style.animation='fadeUp 0.38s ease both';
+}
+function answer(idx,btn){if(S.answered)return;S.answered=true;const q=S.qs[S.qIdx];const correct=idx===q.ans;const btns=document.querySelectorAll('.opt-btn');btns.forEach(b=>b.disabled=true);if(correct){btn.classList.add('correct');S.score++;document.getElementById('live-score').textContent=S.score;}else{btn.classList.add('wrong');}btns[q.ans].classList.add('correct');showToast(correct);setTimeout(()=>{hideToast();S.qIdx++;S.qIdx<S.qs.length?renderQ():showResult();},2100);}
+function showToast(ok){const pool=ok?FB_OK:FB_NO;const msg=pool[Math.floor(Math.random()*pool.length)];const el=document.getElementById('feedback-toast');el.textContent=msg;el.className='feedback-toast show '+(ok?'ok':'fail');el.style.animation='none';void el.offsetWidth;el.style.animation='toastIn 0.3s cubic-bezier(0.34,1.56,0.64,1) forwards';}
+function hideToast(){document.getElementById('feedback-toast').className='feedback-toast';}
+async function showResult(){const s=S.score,pct=Math.round(s/10*100),pts=s*10;document.getElementById('result-num').textContent=s;document.getElementById('res-cat').textContent=CAT_NAMES[S.cat];document.getElementById('res-correct').textContent=s+' / 10';document.getElementById('res-accuracy').textContent=pct+'%';document.getElementById('res-pts').textContent='+'+pts+' pts';let grade;if(s===10)grade='PERFECT! 🌟';else if(s>=8)grade='BRILLIANT ✨';else if(s>=6)grade='GREAT JOB 🎯';else if(s>=3)grade='GOOD EFFORT 💪';else grade='KEEP LEARNING 📚';document.getElementById('result-grade').textContent=grade;document.getElementById('result-quote').textContent=getResultQuote(s,S.nick);if(s>=8)confetti();const entry={nick:S.nick,score:s,cat:CAT_NAMES[S.cat],pts,day:dateStr()};saveLocal(entry);lbSave(entry);showScreen('result');}
+async function showLeaderboard(){showScreen('leaderboard');const list=document.getElementById('lb-list');const loading=document.getElementById('lb-loading');const sub=document.getElementById('lb-subtitle');list.innerHTML='';loading.style.display='block';let entries=null;if(S.jbKey&&S.jbId){entries=await lbFetch();sub.textContent=entries?'Live shared leaderboard 🌍':'Showing local scores';}if(!entries)entries=localLB;loading.style.display='none';if(!entries||!entries.length){list.innerHTML='<p style="text-align:center;color:var(--ink3);padding:1rem">No scores yet — be the first! 🚀</p>';return;}entries.slice(0,15).forEach((e,i)=>{const isMe=e.nick===S.nick;const row=document.createElement('div');row.className='lb-row'+(isMe?' me':'');row.style.animationDelay=i*0.05+'s';row.innerHTML='<div class="lb-rank">'+(i+1)+'</div><div style="flex:1;min-width:0"><span class="lb-nick">'+e.nick+(isMe?' <span style="font-size:0.7rem;color:var(--accent)">(you)</span>':'')+'</span><span class="lb-cat">'+e.cat+'</span></div><div class="lb-pts">'+e.pts+'pts</div>';list.appendChild(row);});}
+function confetti(){const w=document.getElementById('confetti');w.innerHTML='';const c=['#4F6EF7','#7B5FF5','#00C48C','#F5A623','#B0B8CC','#F04E37','#6EE7F7'];for(let i=0;i<60;i++){const d=document.createElement('div');d.className='c-dot';d.style.cssText='left:'+Math.random()*100+'%;background:'+c[Math.floor(Math.random()*c.length)]+';animation-duration:'+(1.8+Math.random()*2)+'s;animation-delay:'+Math.random()*0.5+'s;width:'+(6+Math.random()*8)+'px;height:'+(6+Math.random()*8)+'px;border-radius:'+(Math.random()>.5?'50%':'3px')+';opacity:0.85;';w.appendChild(d);}setTimeout(()=>w.innerHTML='',5000);}
+document.getElementById('nick-input').addEventListener('keydown',e=>{if(e.key==='Enter')startFromHome();});
+
+// ═══════════════════════════════════════════════════
+// INLINE SVG LOGOS — recognisable brand marks
+// ═══════════════════════════════════════════════════
+const L={
+openai:`<svg viewBox="0 0 100 100" style="width:88px;height:88px" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M92.7 41.5a24.6 24.6 0 00-2.1-20.2A24.8 24.8 0 0063.9 9.6a24.6 24.6 0 00-18.5-8.3A24.8 24.8 0 0021.7 17a24.6 24.6 0 00-16.4 11.9 24.8 24.8 0 003 28.6 24.6 24.6 0 002.1 20.2 24.8 24.8 0 0026.7 11.7 24.6 24.6 0 0018.5 8.3 24.8 24.8 0 0023.6-15.7 24.6 24.6 0 0016.4-11.9 24.8 24.8 0 00-2.9-28.6zM57.3 93.2a18.4 18.4 0 01-11.8-4.3l.6-.3 19.6-11.3a3.2 3.2 0 001.6-2.8V47l8.3 4.8v22.8a18.5 18.5 0 01-18.3 18.6zM15.3 76.2a18.4 18.4 0 01-2.2-12.4l.6.3 19.6 11.3a3.2 3.2 0 003.2 0l23.9-13.8v9.5L40.5 82.5a18.5 18.5 0 01-25.2-6.3zM9.9 32.8a18.4 18.4 0 019.6-8.1v23.2a3.2 3.2 0 001.6 2.8l23.9 13.8-8.3 4.8L17 57.6A18.5 18.5 0 019.9 32.8zm68.3 15.9l-23.9-13.8 8.3-4.8 19.7 11.4a18.5 18.5 0 01-2.9 33.4V51.5a3.2 3.2 0 00-1.2-2.8zm8.2-12.5l-.6-.3-19.6-11.3a3.2 3.2 0 00-3.2 0L39.1 38.4v-9.5l19.9-11.5a18.5 18.5 0 0127.4 19.3zM34.4 53.4l-8.3-4.8V25.8a18.5 18.5 0 0130.3-14.2l-.6.3-19.6 11.3a3.2 3.2 0 00-1.6 2.8l-.2 27.4zm4.5-9.7l10.6-6.1 10.6 6.1v12.2l-10.6 6.1-10.6-6.1V43.7z" fill="#000"/></svg>`,
+
+gemini:`<svg viewBox="0 0 80 80" style="width:88px;height:88px" fill="none" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="g1" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#4285F4"/><stop offset="40%" stop-color="#9C27B0"/><stop offset="100%" stop-color="#EA4335"/></linearGradient></defs><path d="M40 6 C40 6 45 32 66 40 C45 48 40 74 40 74 C40 74 35 48 14 40 C35 32 40 6 40 6Z" fill="url(#g1)"/></svg>`,
+
+meta:`<svg viewBox="0 0 220 80" style="width:140px;height:50px" fill="none" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="m1" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#0082FB"/><stop offset="100%" stop-color="#00B4FF"/></linearGradient></defs><path d="M18 52 C18 52 28 18 44 18 C55 18 62 34 62 34 C62 34 68 18 79 18 C95 18 104 52 104 52" stroke="url(#m1)" stroke-width="9" stroke-linecap="round" fill="none"/><text x="118" y="54" font-family="Arial,sans-serif" font-size="34" font-weight="900" fill="#0082FB" letter-spacing="-0.5">Meta</text></svg>`,
+
+mistral:`<svg viewBox="0 0 100 100" style="width:80px;height:80px" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="8" y="8" width="26" height="26" fill="#000"/><rect x="42" y="8" width="26" height="26" fill="#000"/><rect x="76" y="8" width="16" height="26" fill="#000"/><rect x="8" y="42" width="26" height="26" fill="#777"/><rect x="42" y="42" width="26" height="26" fill="#000"/><rect x="8" y="76" width="26" height="16" fill="#000"/><rect x="42" y="76" width="26" height="16" fill="#777"/><rect x="76" y="42" width="16" height="50" fill="#000"/></svg>`,
+
+huggingface:`<svg viewBox="0 0 100 100" style="width:88px;height:88px" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="46" fill="#FFD21E"/><circle cx="36" cy="44" r="6" fill="#1a1a1a"/><circle cx="64" cy="44" r="6" fill="#1a1a1a"/><path d="M33 64 Q50 78 67 64" stroke="#1a1a1a" stroke-width="4" stroke-linecap="round" fill="none"/><path d="M27 30 Q24 16 34 19" stroke="#FF6B35" stroke-width="3.5" stroke-linecap="round" fill="none"/><path d="M73 30 Q76 16 66 19" stroke="#FF6B35" stroke-width="3.5" stroke-linecap="round" fill="none"/></svg>`,
+
+midjourney:`<svg viewBox="0 0 100 90" style="width:100px;height:90px" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M50 8 L12 82 L36 82 L50 56 L64 82 L88 82 Z" fill="#000" stroke="none"/><ellipse cx="50" cy="80" rx="22" ry="5" fill="#000" opacity="0.1"/></svg>`,
+
+stability:`<svg viewBox="0 0 100 100" style="width:88px;height:88px" fill="none" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="st1" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#7C3AED"/><stop offset="100%" stop-color="#4338CA"/></linearGradient></defs><rect width="100" height="100" rx="22" fill="url(#st1)"/><rect x="18" y="26" width="64" height="11" rx="5.5" fill="white"/><rect x="18" y="44" width="48" height="11" rx="5.5" fill="white" opacity="0.75"/><rect x="18" y="62" width="32" height="11" rx="5.5" fill="white" opacity="0.45"/></svg>`,
+
+perplexity:`<svg viewBox="0 0 100 100" style="width:88px;height:88px" fill="none" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="px1" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#20B2AA"/><stop offset="100%" stop-color="#006060"/></linearGradient></defs><path d="M50 8 L50 92" stroke="url(#px1)" stroke-width="5.5" stroke-linecap="round"/><path d="M28 28 L50 8 L72 28" stroke="url(#px1)" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/><path d="M28 72 L50 92 L72 72" stroke="url(#px1)" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/><path d="M28 28 L28 72" stroke="url(#px1)" stroke-width="5.5" stroke-linecap="round"/><path d="M72 28 L72 72" stroke="url(#px1)" stroke-width="5.5" stroke-linecap="round"/><path d="M28 28 L72 72" stroke="url(#px1)" stroke-width="3.5" stroke-linecap="round" opacity="0.5"/><path d="M72 28 L28 72" stroke="url(#px1)" stroke-width="3.5" stroke-linecap="round" opacity="0.5"/></svg>`,
+
+copilot:`<svg viewBox="0 0 100 100" style="width:88px;height:88px" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="47" fill="#161B22"/><circle cx="50" cy="40" r="17" fill="#8B949E"/><circle cx="50" cy="40" r="11" fill="#161B22"/><circle cx="44" cy="38" r="3.5" fill="white"/><circle cx="56" cy="38" r="3.5" fill="white"/><path d="M33 62 Q50 76 67 62" stroke="#8B949E" stroke-width="4.5" stroke-linecap="round" fill="none"/><path d="M26 55 Q21 38 29 33" stroke="#8B949E" stroke-width="3.5" stroke-linecap="round" fill="none"/><path d="M74 55 Q79 38 71 33" stroke="#8B949E" stroke-width="3.5" stroke-linecap="round" fill="none"/></svg>`,
+
+elevenlabs:`<svg viewBox="0 0 100 80" style="width:100px;height:80px" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="8" y="20" width="14" height="40" rx="7" fill="#000"/><rect x="30" y="8" width="14" height="64" rx="7" fill="#000"/><rect x="52" y="26" width="14" height="28" rx="7" fill="#000"/><rect x="74" y="14" width="14" height="52" rx="7" fill="#000"/></svg>`,
+
+runway:`<svg viewBox="0 0 100 100" style="width:88px;height:88px" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="100" height="100" rx="14" fill="#0A0A0A"/><rect x="12" y="30" width="54" height="40" rx="5" fill="white"/><polygon points="70,30 92,50 70,70" fill="#00E87A"/></svg>`,
+
+nvidia:`<svg viewBox="0 0 200 70" style="width:160px;height:56px" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M10 44 L10 12 L28 12 L28 22 C28 22 38 12 52 12 L52 22 C40 22 28 30 28 44 Z" fill="#76B900"/><path d="M10 44 L10 54 L28 54 L28 44 Z" fill="#76B900"/><text x="62" y="48" font-family="Arial Black,sans-serif" font-size="28" font-weight="900" fill="#76B900" letter-spacing="0.5">NVIDIA</text></svg>`,
+
+cohere:`<svg viewBox="0 0 100 100" style="width:88px;height:88px" fill="none" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="co1" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#D97706"/><stop offset="100%" stop-color="#F59E0B"/></linearGradient></defs><circle cx="50" cy="50" r="42" stroke="url(#co1)" stroke-width="9" fill="none"/><circle cx="50" cy="50" r="24" fill="url(#co1)"/><circle cx="50" cy="50" r="11" fill="white"/></svg>`,
+
+xai:`<svg viewBox="0 0 100 100" style="width:88px;height:88px" fill="none" xmlns="http://www.w3.org/2000/svg"><line x1="14" y1="14" x2="86" y2="86" stroke="#000" stroke-width="13" stroke-linecap="round"/><line x1="86" y1="14" x2="14" y2="86" stroke="#000" stroke-width="13" stroke-linecap="round"/><circle cx="50" cy="50" r="9" fill="#000"/></svg>`,
+
+deepmind:`<svg viewBox="0 0 100 100" style="width:88px;height:88px" fill="none" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="dm1" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#1A73E8"/><stop offset="60%" stop-color="#4285F4"/><stop offset="100%" stop-color="#34A853"/></linearGradient></defs><circle cx="50" cy="50" r="40" stroke="url(#dm1)" stroke-width="8" fill="none"/><circle cx="50" cy="50" r="16" fill="url(#dm1)"/><path d="M50 36 L50 64 M36 50 L64 50" stroke="white" stroke-width="4" stroke-linecap="round"/></svg>`,
+
+suno:`<svg viewBox="0 0 100 100" style="width:88px;height:88px" fill="none" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="sn1" x1="0" y1="1" x2="0" y2="0"><stop offset="0%" stop-color="#EC4899"/><stop offset="100%" stop-color="#818CF8"/></linearGradient></defs><circle cx="50" cy="50" r="46" fill="url(#sn1)"/><circle cx="50" cy="50" r="18" fill="white"/><circle cx="50" cy="50" r="8" fill="url(#sn1)"/><path d="M70 30 Q86 50 70 70" stroke="white" stroke-width="4.5" stroke-linecap="round" fill="none"/><path d="M78 22 Q100 50 78 78" stroke="white" stroke-width="3" stroke-linecap="round" fill="none" opacity="0.5"/></svg>`,
+
+scale:`<svg viewBox="0 0 100 100" style="width:88px;height:88px" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="100" height="100" rx="20" fill="#F97316"/><text x="50%" y="68" text-anchor="middle" font-family="Arial Black,sans-serif" font-size="54" font-weight="900" fill="white">S</text></svg>`,
+
+adobe:`<svg viewBox="0 0 100 100" style="width:88px;height:88px" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="100" height="100" rx="14" fill="#FF0000"/><text x="50%" y="64" text-anchor="middle" font-family="Arial Black,sans-serif" font-size="40" font-weight="900" fill="white">Ai</text></svg>`,
+
+replicate:`<svg viewBox="0 0 100 100" style="width:88px;height:88px" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="100" height="100" rx="20" fill="#000"/><rect x="16" y="16" width="28" height="28" rx="5" fill="white"/><rect x="56" y="16" width="28" height="28" rx="5" fill="white" opacity="0.55"/><rect x="16" y="56" width="28" height="28" rx="5" fill="white" opacity="0.55"/><rect x="56" y="56" width="28" height="28" rx="5" fill="white" opacity="0.25"/></svg>`,
+
+claude_logo:`<svg viewBox="0 0 200 70" style="width:160px;height:56px" fill="none" xmlns="http://www.w3.org/2000/svg"><text x="50%" y="50" text-anchor="middle" font-family="Georgia,Times New Roman,serif" font-size="40" font-weight="700" fill="#CC785C" letter-spacing="-0.5">claude</text></svg>`,
+
+groq:`<svg viewBox="0 0 100 100" style="width:88px;height:88px" fill="none" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="gr1" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#F55036"/><stop offset="100%" stop-color="#FF8C00"/></linearGradient></defs><rect width="100" height="100" rx="22" fill="url(#gr1)"/><text x="50%" y="66" text-anchor="middle" font-family="Arial Black,sans-serif" font-size="38" font-weight="900" fill="white" letter-spacing="-1">groq</text></svg>`,
+
+cursor:`<svg viewBox="0 0 100 100" style="width:88px;height:88px" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="100" height="100" rx="22" fill="#000"/><polygon points="22,18 22,82 52,58 62,80 74,74 64,52 84,52" fill="white"/></svg>`,
+
+anthropic:`<svg viewBox="0 0 200 70" style="width:160px;height:56px" fill="none" xmlns="http://www.w3.org/2000/svg"><text x="50%" y="50" text-anchor="middle" font-family="Arial,sans-serif" font-size="26" font-weight="700" fill="#CC785C" letter-spacing="1">Anthropic</text></svg>`,
+
+pika:`<svg viewBox="0 0 100 100" style="width:88px;height:88px" fill="none" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="pk1" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#7C3AED"/><stop offset="100%" stop-color="#EC4899"/></linearGradient></defs><rect width="100" height="100" rx="22" fill="url(#pk1)"/><polygon points="32,28 32,72 76,50" fill="white"/><circle cx="76" cy="50" r="10" fill="white" opacity="0.3"/></svg>`,
+
+ideogram:`<svg viewBox="0 0 100 100" style="width:88px;height:88px" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="100" height="100" rx="22" fill="#000"/><circle cx="50" cy="42" r="20" stroke="white" stroke-width="7" fill="none"/><rect x="43" y="62" width="14" height="22" rx="7" fill="white"/></svg>`,
+
+luma:`<svg viewBox="0 0 100 100" style="width:88px;height:88px" fill="none" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="lu1" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#6366F1"/><stop offset="100%" stop-color="#8B5CF6"/></linearGradient></defs><rect width="100" height="100" rx="50" fill="url(#lu1)"/><text x="50%" y="66" text-anchor="middle" font-family="Arial Black,sans-serif" font-size="34" font-weight="900" fill="white">L</text></svg>`,
+
+udio:`<svg viewBox="0 0 100 100" style="width:88px;height:88px" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="100" height="100" rx="22" fill="#111"/><rect x="18" y="38" width="10" height="30" rx="5" fill="#A78BFA"/><rect x="36" y="26" width="10" height="54" rx="5" fill="#A78BFA"/><rect x="54" y="32" width="10" height="42" rx="5" fill="#A78BFA"/><rect x="72" y="44" width="10" height="18" rx="5" fill="#A78BFA"/></svg>`,
+
+mistral_word:`<svg viewBox="0 0 200 70" style="width:160px;height:56px" fill="none" xmlns="http://www.w3.org/2000/svg"><text x="50%" y="50" text-anchor="middle" font-family="Arial Black,sans-serif" font-size="32" font-weight="900" fill="#FF7000" letter-spacing="-0.5">Mistral</text></svg>`,
+
+together:`<svg viewBox="0 0 100 100" style="width:88px;height:88px" fill="none" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="tg1" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#3B82F6"/><stop offset="100%" stop-color="#8B5CF6"/></linearGradient></defs><rect width="100" height="100" rx="22" fill="url(#tg1)"/><circle cx="34" cy="50" r="12" fill="white"/><circle cx="66" cy="50" r="12" fill="white"/><rect x="34" y="44" width="32" height="12" fill="white"/></svg>`,
+
+google:`<svg viewBox="0 0 100 100" style="width:88px;height:88px" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="44" fill="white" stroke="#e0e0e0" stroke-width="1"/><path d="M50 50 L90 50 A40 40 0 0 0 50 10 Z" fill="#4285F4"/><path d="M50 50 L10 50 A40 40 0 0 0 28 81 Z" fill="#34A853"/><path d="M50 50 L28 81 A40 40 0 0 0 72 81 Z" fill="#FBBC05"/><path d="M50 50 L72 81 A40 40 0 0 0 90 50 Z" fill="#EA4335"/><circle cx="50" cy="50" r="16" fill="white"/></svg>`,
+
+microsoft:`<svg viewBox="0 0 100 100" style="width:88px;height:88px" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="8" y="8" width="40" height="40" fill="#F25022"/><rect x="52" y="8" width="40" height="40" fill="#7FBA00"/><rect x="8" y="52" width="40" height="40" fill="#00A4EF"/><rect x="52" y="52" width="40" height="40" fill="#FFB900"/></svg>`,
+
+amazon:`<svg viewBox="0 0 100 100" style="width:88px;height:88px" fill="none" xmlns="http://www.w3.org/2000/svg"><text x="50%" y="46" text-anchor="middle" font-family="Arial Black,sans-serif" font-size="22" font-weight="900" fill="#FF9900" letter-spacing="-0.5">amazon</text><path d="M22 62 Q50 78 78 62" stroke="#FF9900" stroke-width="4" stroke-linecap="round" fill="none"/><path d="M72 56 L80 62 L72 62" fill="#FF9900"/></svg>`,
+
+tesla:`<svg viewBox="0 0 100 100" style="width:88px;height:88px" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M50 20 L50 90" stroke="#E31937" stroke-width="6" stroke-linecap="round"/><path d="M20 20 L80 20" stroke="#E31937" stroke-width="6" stroke-linecap="round"/><path d="M20 20 Q20 35 50 20 Q80 35 80 20" stroke="#E31937" stroke-width="6" fill="none" stroke-linecap="round"/></svg>`,
+
+samsung:`<svg viewBox="0 0 200 70" style="width:160px;height:56px" fill="none" xmlns="http://www.w3.org/2000/svg"><text x="50%" y="50" text-anchor="middle" font-family="Arial,sans-serif" font-size="30" font-weight="700" fill="#1428A0" letter-spacing="-0.5">SAMSUNG</text></svg>`,
+
+inflection:`<svg viewBox="0 0 100 100" style="width:88px;height:88px" fill="none" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="inf1" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#6366F1"/><stop offset="100%" stop-color="#A78BFA"/></linearGradient></defs><rect width="100" height="100" rx="22" fill="url(#inf1)"/><path d="M30 70 Q50 20 70 70" stroke="white" stroke-width="7" fill="none" stroke-linecap="round"/></svg>`,
+
+ai21:`<svg viewBox="0 0 100 100" style="width:88px;height:88px" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="100" height="100" rx="22" fill="#1a1a2e"/><text x="50%" y="62" text-anchor="middle" font-family="Arial Black,sans-serif" font-size="32" font-weight="900" fill="white">AI21</text></svg>`,
+
+aleph:`<svg viewBox="0 0 100 100" style="width:88px;height:88px" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="100" height="100" rx="22" fill="#0f172a"/><text x="50%" y="65" text-anchor="middle" font-family="Georgia,serif" font-size="52" font-weight="700" fill="white">א</text></svg>`,
+
+cohere2:`<svg viewBox="0 0 200 70" style="width:160px;height:56px" fill="none" xmlns="http://www.w3.org/2000/svg"><text x="50%" y="50" text-anchor="middle" font-family="Arial,sans-serif" font-size="32" font-weight="700" fill="#D97706" letter-spacing="-0.5">Cohere</text></svg>`,
+
+weaviate:`<svg viewBox="0 0 100 100" style="width:88px;height:88px" fill="none" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="wv1" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#00C853"/><stop offset="100%" stop-color="#00897B"/></linearGradient></defs><rect width="100" height="100" rx="22" fill="url(#wv1)"/><polygon points="50,15 80,35 80,65 50,85 20,65 20,35" fill="none" stroke="white" stroke-width="6"/><polygon points="50,32 66,42 66,58 50,68 34,58 34,42" fill="white" opacity="0.4"/></svg>`,
+
+pinecone:`<svg viewBox="0 0 100 100" style="width:88px;height:88px" fill="none" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="pc1" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#1BFFB4"/><stop offset="100%" stop-color="#0D9488"/></linearGradient></defs><rect width="100" height="100" rx="22" fill="#0f172a"/><path d="M50 15 L50 85 M35 30 L50 15 L65 30 M35 50 L50 35 L65 50 M35 70 L50 55 L65 70" stroke="url(#pc1)" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>`,
+
+langchain:`<svg viewBox="0 0 100 100" style="width:88px;height:88px" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="100" height="100" rx="22" fill="#1C3A2F"/><circle cx="28" cy="50" r="10" fill="#2DD4BF"/><circle cx="72" cy="50" r="10" fill="#2DD4BF"/><path d="M38 50 L62 50" stroke="#2DD4BF" stroke-width="4" stroke-dasharray="5 3"/><circle cx="50" cy="30" r="10" fill="#2DD4BF" opacity="0.6"/><path d="M50 40 L50 40 M38 50 Q50 44 50 40" stroke="#2DD4BF" stroke-width="3" fill="none" stroke-dasharray="4 3"/><path d="M62 50 Q50 44 50 40" stroke="#2DD4BF" stroke-width="3" fill="none" stroke-dasharray="4 3"/></svg>`,
+
+weights_biases:`<svg viewBox="0 0 100 100" style="width:88px;height:88px" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="100" height="100" rx="22" fill="#FFBE00"/><text x="50%" y="58" text-anchor="middle" font-family="Arial Black,sans-serif" font-size="34" font-weight="900" fill="#1a1a1a">W&B</text></svg>`,
+
+databricks:`<svg viewBox="0 0 100 100" style="width:88px;height:88px" fill="none" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="db1" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#FF3621"/><stop offset="100%" stop-color="#FF8C00"/></linearGradient></defs><rect width="100" height="100" rx="22" fill="url(#db1)"/><polygon points="50,18 76,33 76,50 50,65 24,50 24,33" fill="none" stroke="white" stroke-width="5"/><polygon points="50,35 62,42 62,58 50,65 38,58 38,42" fill="white" opacity="0.5"/></svg>`,
+
+snowflake:`<svg viewBox="0 0 100 100" style="width:88px;height:88px" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="100" height="100" rx="22" fill="#29B5E8"/><line x1="50" y1="15" x2="50" y2="85" stroke="white" stroke-width="5" stroke-linecap="round"/><line x1="15" y1="50" x2="85" y2="50" stroke="white" stroke-width="5" stroke-linecap="round"/><line x1="22" y1="22" x2="78" y2="78" stroke="white" stroke-width="5" stroke-linecap="round"/><line x1="78" y1="22" x2="22" y2="78" stroke="white" stroke-width="5" stroke-linecap="round"/><circle cx="50" cy="50" r="8" fill="white"/></svg>`,
+
+notion:`<svg viewBox="0 0 100 100" style="width:88px;height:88px" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="100" height="100" rx="22" fill="#fff" stroke="#e0e0e0" stroke-width="2"/><path d="M25 22 L25 78 L48 78 L48 22 Z" fill="#1a1a1a"/><path d="M48 22 L75 55 L75 78 L48 78 Z" fill="#1a1a1a"/></svg>`,
+
+canva:`<svg viewBox="0 0 100 100" style="width:88px;height:88px" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="46" fill="#00C4CC"/><text x="50%" y="66" text-anchor="middle" font-family="Arial Black,sans-serif" font-size="46" font-weight="900" fill="white">C</text></svg>`,
+
+salesforce:`<svg viewBox="0 0 100 100" style="width:88px;height:88px" fill="none" xmlns="http://www.w3.org/2000/svg"><ellipse cx="50" cy="55" rx="42" ry="32" fill="#00A1E0"/><ellipse cx="30" cy="42" rx="18" ry="18" fill="#00A1E0"/><ellipse cx="62" cy="36" rx="22" ry="22" fill="#00A1E0"/><ellipse cx="78" cy="50" rx="16" ry="16" fill="#00A1E0"/></svg>`,
+
+};
+
+// ═══════════════════════════════════════════════════════
+// QUESTION BANKS
+// ═══════════════════════════════════════════════════════
+const QUESTIONS={
+
+logos:[
+  {logo:L.openai,       q:'',opts:['Anthropic','OpenAI','DeepMind','Mistral AI'],       ans:1},
+  {logo:L.claude_logo,  q:'',opts:['Cohere','OpenAI','Anthropic','xAI'],               ans:2},
+  {logo:L.gemini,       q:'',opts:['Anthropic','Meta AI','Microsoft Copilot','Google Gemini'],ans:3},
+  {logo:L.meta,         q:'',opts:['Microsoft','Meta','Google','Amazon'],               ans:1},
+  {logo:L.mistral,      q:'',opts:['Stability AI','Cohere','Mistral AI','Aleph Alpha'], ans:2},
+  {logo:L.huggingface,  q:'',opts:['Replicate','HuggingFace','Scale AI','Cohere'],      ans:1},
+  {logo:L.midjourney,   q:'',opts:['Runway ML','DALL-E','Midjourney','Stable Diffusion'],ans:2},
+  {logo:L.stability,    q:'',opts:['Mistral AI','Stability AI','Replicate','HuggingFace'],ans:1},
+  {logo:L.perplexity,   q:'',opts:['Cohere','Weaviate','Perplexity AI','Qdrant'],       ans:2},
+  {logo:L.copilot,      q:'',opts:['Cursor AI','Tabnine','Replit AI','GitHub Copilot'], ans:3},
+  {logo:L.elevenlabs,   q:'',opts:['Suno AI','Udio','ElevenLabs','Resemble AI'],        ans:2},
+  {logo:L.runway,       q:'',opts:['Pika Labs','Runway ML','Kling','Luma AI'],          ans:1},
+  {logo:L.nvidia,       q:'',opts:['AMD','Intel','NVIDIA','Qualcomm'],                  ans:2},
+  {logo:L.cohere,       q:'',opts:['Writer AI','Cohere','AI21 Labs','Aleph Alpha'],     ans:1},
+  {logo:L.xai,          q:'',opts:['OpenAI','Anthropic','xAI (Grok)','DeepMind'],      ans:2},
+  {logo:L.adobe,        q:'',opts:['Canva AI','Adobe Firefly','Microsoft Designer','Midjourney'],ans:1},
+  {logo:L.deepmind,     q:'',opts:['OpenAI','Meta AI','Anthropic','Google DeepMind'],   ans:3},
+  {logo:L.suno,         q:'',opts:['Udio','ElevenLabs','Suno AI','Mubert'],             ans:2},
+  {logo:L.scale,        q:'',opts:['Labelbox','Scale AI','Weights & Biases','HuggingFace'],ans:1},
+  {logo:L.replicate,    q:'',opts:['HuggingFace','Replicate','Modal','Together AI'],    ans:1},
+  {logo:L.groq,         q:'',opts:['Groq','Lambda Labs','CoreWeave','Together AI'],      ans:0},
+  {logo:L.cursor,       q:'',opts:['Replit','Windsurf','Cursor','Tabnine'],              ans:2},
+  {logo:L.anthropic,    q:'',opts:['Cohere','Anthropic','Mistral AI','AI21 Labs'],       ans:1},
+  {logo:L.pika,         q:'',opts:['Runway ML','Luma AI','Kling AI','Pika Labs'],        ans:3},
+  {logo:L.ideogram,     q:'',opts:['Ideogram','Canva AI','Adobe Firefly','Recraft'],     ans:0},
+  {logo:L.luma,         q:'',opts:['Runway ML','Pika Labs','Luma AI','Kling'],           ans:2},
+  {logo:L.udio,         q:'',opts:['Suno AI','ElevenLabs','Udio','Mubert'],              ans:2},
+  {logo:L.mistral_word, q:'',opts:['Cohere','Mistral AI','Writer','AI21 Labs'],          ans:1},
+  {logo:L.together,     q:'',opts:['Replicate','Modal','Together AI','Baseten'],         ans:2},
+  {logo:L.google,       q:'',opts:['Apple','Microsoft','Google','Yahoo'],                ans:2},
+  {logo:L.microsoft,    q:'',opts:['Google','Microsoft','IBM','Meta'],                   ans:1},
+  {logo:L.amazon,       q:'',opts:['Shopify','eBay','Amazon','Alibaba'],                 ans:2},
+  {logo:L.tesla,        q:'',opts:['BMW','Tesla','Rivian','Ferrari'],                    ans:1},
+  {logo:L.inflection,   q:'',opts:['Cohere','AI21 Labs','Inflection AI','Writer'],       ans:2},
+  {logo:L.ai21,         q:'',opts:['Aleph Alpha','AI21 Labs','Cohere','Writer'],         ans:1},
+  {logo:L.aleph,        q:'',opts:['AI21 Labs','DeepMind','Aleph Alpha','Mistral AI'],   ans:2},
+  {logo:L.cohere2,      q:'',opts:['Writer AI','Cohere','AI21 Labs','Jasper'],           ans:1},
+  {logo:L.weaviate,     q:'',opts:['Pinecone','Chroma','Weaviate','Qdrant'],             ans:2},
+  {logo:L.pinecone,     q:'',opts:['Weaviate','Pinecone','Chroma','Milvus'],             ans:1},
+  {logo:L.langchain,    q:'',opts:['LlamaIndex','LangChain','Haystack','Flowise'],       ans:1},
+  {logo:L.weights_biases,q:'',opts:['MLflow','Weights & Biases','Neptune AI','Comet'],  ans:1},
+  {logo:L.databricks,   q:'',opts:['Snowflake','Databricks','Palantir','Cloudera'],      ans:1},
+  {logo:L.snowflake,    q:'',opts:['Databricks','Snowflake','Azure','AWS'],              ans:1},
+  {logo:L.notion,       q:'',opts:['Coda','Notion','Confluence','Linear'],               ans:1},
+  {logo:L.canva,        q:'',opts:['Adobe','Figma','Canva','Sketch'],                    ans:2},
+  {logo:L.salesforce,   q:'',opts:['HubSpot','Salesforce','Zendesk','ServiceNow'],       ans:1},
+  {logo:L.samsung,      q:'',opts:['LG','Sony','Samsung','Huawei'],                      ans:2},
+],
+
+history:[
+  {q:"In which year did Warren McCulloch and Walter Pitts publish the first mathematical neural network paper?",opts:["1943","1950","1956","1963"],ans:0},
+  {q:"Alan Turing's 1950 paper 'Computing Machinery and Intelligence' posed which famous question?",opts:["Can computers exist?","Can machines think?","What is intelligence?","Can robots feel pain?"],ans:1},
+  {q:"The Dartmouth Conference of 1956 officially coined which term?",opts:["Machine Intelligence","Neural Networks","Artificial Intelligence","Deep Learning"],ans:2},
+  {q:"ELIZA — the world's first chatbot — was built at MIT in which year?",opts:["1960","1964","1966","1970"],ans:2},
+  {q:"AlexNet won ImageNet 2012 with 15.3% error. What was second place's error rate?",opts:["20.4%","22.1%","26.2%","31.5%"],ans:2},
+  {q:"AlphaGo's legendary 'Move 37' was played against which Go champion?",opts:["Ke Jie","Fan Hui","Lee Sedol","Park Junghwan"],ans:2},
+  {q:"The 2017 Transformer paper 'Attention Is All You Need' came from which organisation?",opts:["OpenAI","DeepMind","Google Brain","Meta AI"],ans:2},
+  {q:"ChatGPT reached 1 million users in how many days after its launch?",opts:["2","5","14","30"],ans:1},
+  {q:"Which DeepMind system cracked the 50-year protein folding problem?",opts:["AlphaCode","AlphaFold","AlphaStar","AlphaGeometry"],ans:1},
+  {q:"DeepSeek R1 — which caused NVIDIA's largest-ever single-day stock drop — launched in:",opts:["October 2024","December 2024","January 2025","March 2025"],ans:2},
+  {q:"Geoffrey Hinton, Yann LeCun and Yoshua Bengio shared the 2018 Turing Award for:",opts:["Robotics research","Deep learning breakthroughs","Natural language processing","Computer vision only"],ans:1},
+  {q:"The first AI to beat a human world champion at Go was:",opts:["AlphaZero","DeepBlue","AlphaGo","MuZero"],ans:2},
+  {q:"Arthur Samuel coined the term 'Machine Learning' in which year?",opts:["1950","1956","1959","1965"],ans:2},
+  {q:"The world's first AI Safety Summit was held at which iconic UK location?",opts:["Oxford University","Cambridge University","Bletchley Park","10 Downing Street"],ans:2},
+  {q:"OpenAI's o1 model introduced which key capability over previous GPT models?",opts:["Larger context window","Chain-of-thought reasoning before answering","Real-time web access","True multi-modal video"],ans:1},
+  {q:"IBM's Deep Blue defeated world chess champion Garry Kasparov in which year?",opts:["1993","1995","1997","2001"],ans:2},
+  {q:"Google Brain was founded in which year?",opts:["2009","2011","2013","2015"],ans:1},
+  {q:"OpenAI was originally incorporated as which type of organisation in 2015?",opts:["For-profit startup","Non-profit research lab","Government-funded agency","University spin-out"],ans:1},
+  {q:"Which organisation created BERT — the model that transformed NLP in 2018?",opts:["OpenAI","Meta AI","Google","Microsoft"],ans:2},
+  {q:"The 'perceptron' — the first trainable artificial neuron — was invented by whom in 1957?",opts:["John McCarthy","Frank Rosenblatt","Marvin Minsky","Alan Turing"],ans:1},
+  {q:"OpenAI released GPT-4 in which month and year?",opts:["November 2022","March 2023","August 2023","January 2024"],ans:1},
+  {q:"The first 'AI winter' — a period of collapsed funding and interest — began in which decade?",opts:["1960s","1970s","1980s","1990s"],ans:1},
+  {q:"Who co-founded Anthropic after departing from OpenAI in 2021?",opts:["Sam Altman","Greg Brockman","Dario Amodei","Ilya Sutskever"],ans:2},
+  {q:"AlphaGo Zero beat the original AlphaGo 100-0. What made it revolutionary?",opts:["It used more training data than before","It learned with zero human game data — purely self-play","It ran on a single consumer GPU","It used a completely new architecture"],ans:1},
+  {q:"The term 'Artificial Intelligence' was coined at Dartmouth in 1956. Who organised the conference?",opts:["Alan Turing","John McCarthy","Geoffrey Hinton","Marvin Minsky"],ans:1},
+  {q:"Which AI from Google DeepMind solved International Mathematical Olympiad problems at gold-medal level in 2024?",opts:["AlphaCode 2","Gemini Ultra","AlphaProof","Gemini 1.5 Pro"],ans:2},
+  {q:"Sam Altman was fired by OpenAI's board in November 2023 and reinstated after roughly how long?",opts:["24 hours","5 days","2 weeks","1 month"],ans:1},
+  {q:"What year did Stability AI release Stable Diffusion publicly — democratising AI image generation?",opts:["2020","2021","2022","2023"],ans:2},
+  {q:"GPT-2 was released by OpenAI in 2019. Why was it controversial at launch?",opts:["It could generate images","OpenAI withheld the full model fearing misuse for fake news","It was trained on illegal data","It could access the internet in real time"],ans:1},
+  {q:"GPT-1 — the very first GPT model — had approximately how many parameters?",opts:["117 million","1.5 billion","17 billion","175 billion"],ans:0},
+  {q:"Yann LeCun developed convolutional neural networks largely at which institution in the 1980s–90s?",opts:["Stanford","MIT","Bell Labs","University of Toronto"],ans:2},
+  {q:"Which AI research organisation publishes the influential 'State of AI Report' each year?",opts:["OpenAI","DeepMind","Air Street Capital","MIT CSAIL"],ans:2},
+  {q:"The EU AI Act — the world's first comprehensive AI law — was fully passed in which year?",opts:["2022","2023","2024","2025"],ans:2},
+  {q:"Anthropic's Constitutional AI method was first described in a paper published in which year?",opts:["2021","2022","2023","2024"],ans:1},
+  {q:"The first version of GPT-3's technical paper was titled:",opts:["Language Models are Few-Shot Learners","Attention Is All You Need","Improving Language Understanding by Generative Pre-Training","Scaling Laws for Neural Language Models"],ans:0},
+  {q:"Which year did OpenAI launch the GPT Store, allowing users to create custom GPTs?",opts:["2022","2023","2024","2025"],ans:2},
+  {q:"The original Transformer architecture used how many encoder and decoder layers?",opts:["3","6","12","24"],ans:1},
+  {q:"Which company created the T5 model — 'Text-To-Text Transfer Transformer'?",opts:["OpenAI","Meta","Google","Microsoft"],ans:2},
+  {q:"ImageNet — the dataset that kickstarted the deep learning revolution — was created by whom?",opts:["Geoffrey Hinton","Yann LeCun","Fei-Fei Li","Andrew Ng"],ans:2},
+  {q:"Which year did Google acquire DeepMind?",opts:["2012","2014","2016","2018"],ans:1},
+  {q:"The famous 'Bitter Lesson' essay arguing compute always wins was written by:",opts:["Geoffrey Hinton","Yann LeCun","Richard Sutton","Yoshua Bengio"],ans:2},
+  {q:"GPT-2 was trained on a dataset called:",opts:["Common Crawl","WebText","The Pile","C4"],ans:1},
+  {q:"Which AI lab created the Flamingo vision-language model in 2022?",opts:["OpenAI","Meta AI","Google DeepMind","Anthropic"],ans:2},
+  {q:"Meta released which open-source coding model in 2024?",opts:["CodeLLaMA 2","StarCoder","Code Llama","Codestral"],ans:2},
+  {q:"The seminal 1986 backpropagation paper was co-authored by:",opts:["Turing and Shannon","Rumelhart, Hinton and Williams","LeCun and Bengio","McCarthy and Minsky"],ans:1},
+  {q:"Which AI company launched the 'Responsible Scaling Policy' as a safety framework?",opts:["OpenAI","DeepMind","Anthropic","Meta AI"],ans:2},
+  {q:"AlphaCode 2 reportedly performed at what percentile among competitive programmers?",opts:["50th","75th","85th","95th"],ans:2},
+  {q:"Which year was the first ImageNet Large Scale Visual Recognition Challenge (ILSVRC) held?",opts:["2008","2010","2012","2014"],ans:1},
+  {q:"Ilya Sutskever co-founded which AI safety lab after departing OpenAI in 2024?",opts:["Anthropic","Safe Superintelligence Inc (SSI)","xAI","Reflection AI"],ans:1},
+  {q:"The 'scaling hypothesis' — that bigger models always get smarter — is most associated with:",opts:["Yann LeCun","Jared Kaplan","Sam Altman","Demis Hassabis"],ans:1},
+  {q:"What was the name of the first AI program to defeat a world champion at checkers (1994)?",opts:["Deep Blue","Chinook","TD-Gammon","Stockfish"],ans:1},
+  {q:"The 2021 paper 'On the Opportunities and Risks of Foundation Models' came from which university?",opts:["MIT","Oxford","Stanford","Carnegie Mellon"],ans:2},
+  {q:"OpenAI's Codex — which powered GitHub Copilot — was built on which base model?",opts:["GPT-2","GPT-3","GPT-3.5","GPT-4"],ans:1},
+  {q:"Which country launched the world's first national AI strategy in 2017?",opts:["USA","China","Canada","UK"],ans:2},
+  {q:"Marvin Minsky and John McCarthy founded which AI lab at MIT in 1959?",opts:["AI Now Institute","MIT CSAIL","MIT AI Lab","MIT Media Lab"],ans:2},
+  {q:"The word2vec algorithm — which taught machines word meaning via vectors — came from:",opts:["OpenAI","Facebook AI","Google","Microsoft Research"],ans:2},
+  {q:"Which model first demonstrated strong 'in-context learning' at scale in 2020?",opts:["BERT","T5","GPT-3","RoBERTa"],ans:2},
+  {q:"OpenAI's first product before ChatGPT was a coding tool. What was it?",opts:["Copilot","Codex","OpenAI Playground","DALL-E"],ans:1},
+  {q:"Which European AI lab created the BLOOM open-source multilingual LLM in 2022?",opts:["Mistral AI","Aleph Alpha","BigScience","LAION"],ans:2},
+  {q:"The 'Alignment Forum' — where AI safety research is shared — was founded by which organisation?",opts:["Anthropic","Machine Intelligence Research Institute (MIRI)","OpenAI","DeepMind"],ans:1},
+  {q:"Google's LaMDA chatbot gained public attention in 2022 when an engineer claimed it was:",opts:["Better than GPT-3","Sentient","Capable of coding","Smarter than humans"],ans:1},
+  {q:"Meta's first LLaMA model (LLaMA 1) was released in which year?",opts:["2022","2023","2024","2025"],ans:1},
+  {q:"Which reinforcement learning milestone involved an AI learning to play Atari games from raw pixels?",opts:["AlphaGo","DQN by DeepMind","AlphaStar","OpenAI Five"],ans:1},
+  {q:"OpenAI's first GPT model (GPT-1) was released in which year?",opts:["2016","2017","2018","2019"],ans:2},
+  {q:"Which AI safety concept describes an AI pursuing instrumental goals not intended by its creators?",opts:["Goal misgeneralisation","Instrumental convergence","Reward hacking","Mesa-optimisation"],ans:1},
+  {q:"The 'Turing Test' was originally described in a paper called:",opts:["Computing Machinery and Intelligence","Can Machines Think?","The Imitation Game","Intelligent Machinery"],ans:0},
+  {q:"Which Chinese tech giant released the Ernie Bot LLM to compete with ChatGPT?",opts:["Alibaba","Baidu","Tencent","ByteDance"],ans:1},
+  {q:"OpenAI's nonprofit was founded in which year?",opts:["2013","2015","2017","2019"],ans:1},
+  {q:"The paper introducing BERT was titled:",opts:["Pre-training of Deep Bidirectional Transformers","BERT: Bidirectional Encoder Representations from Transformers","Deep Language Understanding","Bidirectional Attention for NLP"],ans:1},
+  {q:"Which AI lab published the 'Sparks of AGI' paper about GPT-4 in 2023?",opts:["OpenAI","Google Brain","Microsoft Research","DeepMind"],ans:2},
+  {q:"Stable Diffusion was released by Stability AI in partnership with which academic group?",opts:["MIT CSAIL","Stanford HAI","CompVis at LMU Munich","Oxford VGG"],ans:2},
+  {q:"The 'Godfather of AI' Geoffrey Hinton left Google in 2023 to speak freely about:",opts:["AI's economic benefits","AI existential risks","AI regulation","AI bias"],ans:1},
+  {q:"Which AI defeated top human players at the strategy game StarCraft II in 2019?",opts:["OpenAI Five","AlphaGo","AlphaStar","MuZero"],ans:2},
+  {q:"Apple's Siri — one of the first mainstream AI assistants — launched in which year?",opts:["2009","2011","2013","2015"],ans:1},
+  {q:"The famous 'No Free Lunch' theorem in machine learning states:",opts:["All models perform equally well averaged across all problems","Larger models always outperform smaller ones","Data quality beats data quantity","Compute is the only bottleneck"],ans:0},
+  {q:"Which year did Amazon launch Alexa?",opts:["2012","2014","2016","2018"],ans:1},
+  {q:"The 'Mixture of Experts' architecture was popularised at massive scale by which 2024 model?",opts:["GPT-4","Gemini Ultra","Mixtral 8x7B","Claude 3"],ans:2},
+],
+
+concepts:[
+  {q:"What does 'LLM' stand for?",opts:["Large Logic Machine","Large Language Model","Linear Learning Method","Language Learning Module"],ans:1},
+  {q:"What is an AI 'hallucination'?",opts:["When AI sees patterns in random noise","When AI generates confident but factually wrong information","When AI models overheat during training","When AI responses enter an infinite loop"],ans:1},
+  {q:"What is 'fine-tuning' an AI model?",opts:["Making the model use less memory","Further training a pre-trained model on specific domain data","Reducing the parameter count","Connecting two separate models"],ans:1},
+  {q:"In a GAN, what are the two competing components?",opts:["Encoder and Decoder","Transformer and Attention head","Generator and Discriminator","Teacher and Student"],ans:2},
+  {q:"What does 'context window' refer to for an LLM?",opts:["The chat interface design","The max amount of text the model can process in one go","The size of the training dataset","How fast the model generates tokens"],ans:1},
+  {q:"What is RLHF — the technique used to train ChatGPT and Claude?",opts:["Rapid Learning from Historical Facts","Reinforcement Learning from Human Feedback","Recursive Logic for Human Familiarity","Real-time Learning Hybrid Framework"],ans:1},
+  {q:"What are 'emergent abilities' in large AI models?",opts:["Capabilities the model was explicitly trained to have","Unexpected capabilities that appear as scale increases","Skills only available at inference time","Abilities the model loses with more training"],ans:1},
+  {q:"What is 'test-time compute' — the core insight behind OpenAI's o1?",opts:["Running cost benchmarks at evaluation time","Spending more compute reasoning at inference rather than just training bigger","Estimating the cost of API calls","Testing accuracy on held-out evaluation sets"],ans:1},
+  {q:"What is Retrieval-Augmented Generation (RAG)?",opts:["A method to generate more images","Combining LLM generation with external database retrieval to improve accuracy","A robot motion control method","A way to speed up model training"],ans:1},
+  {q:"What is 'prompt engineering'?",opts:["Building AI hardware chips","Designing neural network circuit layouts","Crafting effective inputs to get better AI outputs","Writing API integration code"],ans:2},
+  {q:"What does 'multimodal AI' mean?",opts:["AI that supports many languages","AI that can process text, images, audio, and video together","AI distributed across many servers","AI that switches between different model sizes"],ans:1},
+  {q:"Constitutional AI (Anthropic) teaches models to:",opts:["Follow national legal codes","Critique and revise their own outputs against a set of principles","Learn only from lawfully acquired data","Refuse all controversial requests"],ans:1},
+  {q:"The 'alignment problem' in AI refers to:",opts:["Aligning code formatting across engineering teams","Ensuring AI systems reliably pursue goals beneficial to humanity","Physically aligning servers in data centres","Calibrating AI sensor inputs"],ans:1},
+  {q:"A 'Mixture of Experts' (MoE) model:",opts:["Is trained by multiple competing companies","Only activates a relevant subset of parameters per input","Has many attention heads per layer","Is an ensemble of completely separate models"],ans:1},
+  {q:"What does 'temperature' control in an LLM's output?",opts:["The server's thermal management","How fast the model responds","The randomness or creativity of the generated text","The maximum output length"],ans:2},
+  {q:"What is 'tokenisation' in LLMs?",opts:["Crypto payments for API access","Breaking text into smaller units the model can process","An API security mechanism","A data compression technique"],ans:1},
+  {q:"What does 'zero-shot' prompting mean?",opts:["The model gets zero attempts","Asking the model to complete a task with no examples in the prompt","Using zero GPU compute","The model has zero training on that topic"],ans:1},
+  {q:"What is 'overfitting' in machine learning?",opts:["Training on an overly large dataset","When a model memorises training data but fails to generalise","When compute costs exceed budget","When a model generates outputs that are too long"],ans:1},
+  {q:"What is an 'embedding' in AI?",opts:["Embedding code into a webpage","A dense numerical vector representing a word or concept","Inserting images into documents","A data compression technique"],ans:1},
+  {q:"What is 'chain-of-thought' prompting?",opts:["Linking multiple AI models in a pipeline","Encouraging AI to show intermediate reasoning steps before its final answer","A specific neural architecture","A training method using sequential data"],ans:1},
+  {q:"What is the 'attention mechanism' in a Transformer?",opts:["A method to keep the model focused on one topic","A mechanism that weighs the importance of each token relative to others","The model's ability to handle concurrent users","A memory reduction technique"],ans:1},
+  {q:"What does 'quantization' do to an AI model?",opts:["Makes it answer more precisely","Reduces model size by using lower-precision numbers for weights","Increases parameter count","Speeds up training by adding more GPUs"],ans:1},
+  {q:"What is 'few-shot' prompting?",opts:["Prompting with very little text","Providing a handful of input-output examples in the prompt to guide the model","Using the model for only a few tasks","Limiting responses to short replies"],ans:1},
+  {q:"What is a 'vector database'?",opts:["A database storing only numbers","A database optimised to store and search high-dimensional embeddings","A database for video files","A GPU memory management system"],ans:1},
+  {q:"What is 'knowledge distillation'?",opts:["Extracting facts from training corpora","Training a small 'student' model to mimic a large 'teacher' model","Removing harmful content from a model","Summarising training data"],ans:1},
+  {q:"What is 'model collapse'?",opts:["When servers crash under load","When a model degrades after training on AI-generated instead of human data","When a model refuses all requests","When training costs overrun"],ans:1},
+  {q:"What is 'in-context learning' in LLMs?",opts:["The model learning from new data after deployment","The model adapting based on examples in the prompt, no retraining needed","The model accessing live internet context","Learning inside a transformer layer"],ans:1},
+  {q:"What are 'AI agents'?",opts:["Human workers who supervise AI systems","AI systems that autonomously take sequences of actions to achieve a goal","Simple chatbots with fixed responses","AI models that only respond to voice"],ans:1},
+  {q:"What is 'reward hacking' in reinforcement learning?",opts:["Hacking into an AI system to steal reward data","When an agent finds unintended ways to maximise reward without achieving the actual goal","When humans give false reward signals","Exploiting compute for crypto mining"],ans:1},
+  {q:"What is a 'foundation model'?",opts:["The earliest model ever trained","A large model pre-trained on broad data, adaptable to many downstream tasks","A model used to train other models","The base layer of a neural network"],ans:1},
+  {q:"What is 'Chinchilla scaling'?",opts:["Bigger models always win","Optimal training uses ~20 tokens per parameter — many large models were undertrained","Training on diverse data beats bigger models","Inference cost matters more than training cost"],ans:1},
+  {q:"What is 'LoRA' in fine-tuning?",opts:["A type of long-range attention mechanism","Low-Rank Adaptation — fine-tuning via small trainable matrices added to a frozen model","A large-scale robotics algorithm","A training dataset compression method"],ans:1},
+  {q:"What does 'SFT' stand for in the RLHF pipeline?",opts:["Supervised Fine-Tuning","Stochastic Function Training","Scaled Feature Testing","Synthetic Feedback Training"],ans:0},
+  {q:"What is 'mechanistic interpretability' in AI research?",opts:["Understanding how to build AI chips","Reverse-engineering what computations neural networks actually perform internally","Making AI explanations readable to non-experts","A method to speed up transformer inference"],ans:1},
+  {q:"What is 'AI safety' primarily concerned with?",opts:["Making AI hardware physically safe","Ensuring AI systems behave reliably and without causing harm","Making AI cheaper to run","Protecting AI systems from cyber attacks"],ans:1},
+  {q:"What is 'transfer learning'?",opts:["Moving a model between cloud providers","Reusing knowledge from one task to improve performance on a different task","Transferring data between databases","Copying weights between identical models"],ans:1},
+  {q:"What is a 'parameter' in a neural network?",opts:["A setting in the chat interface","A learnable weight or bias value adjusted during training","A type of prompt instruction","A measure of model speed"],ans:1},
+  {q:"What is 'RLHF' primarily designed to solve?",opts:["Making models faster","Aligning model outputs with human preferences and values","Reducing hallucinations completely","Extending the context window"],ans:1},
+  {q:"What does 'inference' mean in AI?",opts:["Training the model on new data","Running a trained model to generate outputs on new inputs","Evaluating model quality","Compressing the model"],ans:1},
+  {q:"What is a 'softmax' function used for in neural networks?",opts:["Reducing model size","Converting raw scores into a probability distribution","Normalising training data","Applying dropout regularisation"],ans:1},
+  {q:"What is 'gradient descent' in machine learning?",opts:["A data sorting algorithm","An optimisation algorithm that minimises loss by adjusting weights","A way to reduce training data size","A method to evaluate model accuracy"],ans:1},
+  {q:"What is 'sparse attention' designed to do?",opts:["Reduce the number of training examples","Make attention computation scale better by only attending to relevant tokens","Increase parameter count","Make outputs shorter"],ans:1},
+  {q:"What does 'AGI' stand for?",opts:["Advanced GPU Infrastructure","Artificial General Intelligence","Automated Goal Integration","Augmented Generative Interface"],ans:1},
+  {q:"What is 'Constitutional AI' designed to avoid?",opts:["Copyright violations","Harmful or dishonest outputs — guided by a set of written principles","Repetitive responses","Slow inference speed"],ans:1},
+  {q:"In machine learning, what is a 'loss function'?",opts:["A formula measuring how much compute is lost during training","A metric quantifying how wrong the model's predictions are","A function that removes neurons","A security mechanism"],ans:1},
+  {q:"What does 'encoder-decoder' architecture do?",opts:["Encrypts and decrypts data","Encodes input into a representation then decodes it into output","Splits a model into two separate models","Connects two AI systems"],ans:1},
+  {q:"What is 'dropout' in neural network training?",opts:["When training stops early","Randomly disabling neurons during training to prevent overfitting","Removing low-value training examples","Reducing the learning rate"],ans:1},
+  {q:"What is a 'residual connection' (skip connection) in deep networks?",opts:["A backup connection between servers","Adding a layer's input directly to its output to help gradients flow in deep networks","A connection that skips certain training batches","A way to link two separate models"],ans:1},
+  {q:"What is 'beam search' in text generation?",opts:["Scanning training data for relevant examples","Keeping multiple candidate sequences at each step to find better overall outputs","A way to search through embeddings","A type of attention mechanism"],ans:1},
+  {q:"What is 'data augmentation' in machine learning?",opts:["Buying more training data","Artificially expanding a training dataset using transforms like flips or crops","Adding noise to model weights","Labelling unlabelled data"],ans:1},
+  {q:"What is the 'vanishing gradient' problem?",opts:["When gradients become too large and destabilise training","When gradients shrink to near zero in deep networks, preventing learning in early layers","When the loss function returns zero","When training data runs out"],ans:1},
+  {q:"What does 'top-p' (nucleus sampling) control?",opts:["Maximum output length","The cumulative probability threshold for token sampling, controlling diversity","The temperature of the model","The number of candidate responses"],ans:1},
+  {q:"What is 'model distillation' primarily used for?",opts:["Extracting training data from a model","Creating a smaller, faster model that mimics a larger one","Reducing hallucinations","Increasing parameter count"],ans:1},
+  {q:"What is 'causal language modelling'?",opts:["Training a model to understand cause and effect","Training where each token predicts only the next token, not future ones","A model trained on cause-effect datasets","A method for fact-checking outputs"],ans:1},
+  {q:"What is 'grounding' in AI?",opts:["Shutting down an AI system safely","Connecting AI outputs to real-world facts, data, or context","Training an AI from scratch","Limiting an AI's internet access"],ans:1},
+  {q:"What is 'multi-head attention'?",opts:["Having multiple AI assistants answer simultaneously","Running attention multiple times in parallel across different subspaces","A model that handles multiple users","Applying multiple prompts at once"],ans:1},
+  {q:"What is 'positional encoding' in a Transformer?",opts:["Storing model weights at specific positions","Injecting information about token order since Transformers have no built-in sequence sense","Encoding sensitive data securely","Assigning positions to training examples"],ans:1},
+  {q:"What is 'synthetic data' in AI?",opts:["Data created by AI models rather than collected from the real world","Data stored in synthetic databases","Test data used during evaluation","Data from video game environments"],ans:1},
+  {q:"What is 'perplexity' as an LLM evaluation metric?",opts:["A measure of how confusing the model's outputs are to humans","A measure of how well a model predicts a sample — lower is better","The percentage of hallucinations in outputs","The time taken to generate a response"],ans:1},
+  {q:"What is 'instruction tuning'?",opts:["Writing better system prompts","Fine-tuning a model on instruction-response pairs to follow human directions better","Tuning hardware settings for inference","A type of few-shot prompting"],ans:1},
+  {q:"What is a 'system prompt' in LLM deployment?",opts:["A hardware diagnostic command","A hidden instruction given to the model before the user conversation to set behaviour","The first message a user sends","A debugging command for model outputs"],ans:1},
+  {q:"What is 'catastrophic forgetting' in neural networks?",opts:["A model crashing during training","When training on new tasks causes a model to forget previously learned knowledge","When a model deletes training data","GPU memory overflow during training"],ans:1},
+  {q:"What is 'self-supervised learning'?",opts:["A model that supervises human workers","Learning from unlabelled data by predicting parts of the input from other parts","A model that evaluates its own outputs","Training using only synthetic data"],ans:1},
+  {q:"What is 'speculative decoding' in LLM inference?",opts:["Guessing the user's next question","Using a small model to draft tokens, then verifying with a larger model for faster output","Predicting stock prices with LLMs","A method for uncertainty estimation"],ans:1},
+  {q:"What does 'MMLU' benchmark test in LLMs?",opts:["Multimodal visual understanding","Massive Multitask Language Understanding — knowledge across 57 academic subjects","Memory and storage utilisation","Multi-Model Language Usage"],ans:1},
+  {q:"What is 'tool use' / 'function calling' in LLMs?",opts:["Formatting code in responses","Allowing an LLM to call external APIs and tools during generation","A method for prompt chaining","Using AI to write software tools"],ans:1},
+  {q:"What is the 'Chinese Room' thought experiment?",opts:["A test of AI translation ability","John Searle's argument that symbol manipulation alone does not constitute understanding","A Chinese AI safety framework","A benchmark for multilingual models"],ans:1},
+  {q:"What is 'continuous pre-training'?",opts:["Training a model without stopping","Further pre-training a base model on new domain data without full retraining","A technique to avoid catastrophic forgetting","Running inference continuously"],ans:1},
+],
+
+tools:[
+  {q:"What does 'GPT' stand for in ChatGPT?",opts:["General Purpose Technology","Generative Pre-trained Transformer","Globally Processed Text","Guided Predictive Thinking"],ans:1},
+  {q:"Claude was created by which AI safety company?",opts:["OpenAI","Google DeepMind","Anthropic","Mistral AI"],ans:2},
+  {q:"ChatGPT reached 1 million users in 5 days. Who held the 100 million user record it then broke?",opts:["Instagram","TikTok","YouTube","Spotify"],ans:1},
+  {q:"Khanmigo is an AI tutor built by which organisation?",opts:["Google","Khan Academy","Duolingo","Coursera"],ans:1},
+  {q:"Apple Intelligence was announced as part of which iOS version?",opts:["iOS 16","iOS 17","iOS 18","iOS 19"],ans:2},
+  {q:"GitHub Copilot helped developers complete tasks approximately how much faster in Microsoft's study?",opts:["25%","40%","55%","70%"],ans:2},
+  {q:"OpenAI's AI video generation model released in February 2024 is called:",opts:["Sora","Luma Dream Machine","Kling","Veo"],ans:0},
+  {q:"Woebot is an AI tool designed for:",opts:["Coding assistance","Mental health support using CBT techniques","Language learning","Photorealistic image generation"],ans:1},
+  {q:"Meta's open-source model family that enabled AI on a laptop is called:",opts:["Falcon","Mistral","LLaMA","Bloom"],ans:2},
+  {q:"Google's Project Astra (2024) demonstrated AI that could:",opts:["Generate feature-length films","Understand the world in real time through a phone camera","Translate 200 languages simultaneously","Write and run full codebases autonomously"],ans:1},
+  {q:"Duolingo Max lets learners:",opts:["Instantly look up any word","Roleplay conversations with an AI character in their target language","Auto-translate any website","Write essays in foreign languages automatically"],ans:1},
+  {q:"Cursor AI code editor primarily uses which underlying models?",opts:["Gemini only","LLaMA only","Claude and GPT-4 (switchable)","Mistral only"],ans:2},
+  {q:"Microsoft 365 Copilot is deeply integrated into which suite?",opts:["Google Workspace","Microsoft 365 apps (Word, Excel, Teams)","Adobe Creative Cloud","Salesforce CRM"],ans:1},
+  {q:"ElevenLabs became famous for:",opts:["Photorealistic image generation","Voice cloning and ultra-realistic text-to-speech","AI video generation","Autonomous code writing"],ans:1},
+  {q:"Mistral AI is headquartered in which city?",opts:["London","Berlin","San Francisco","Paris"],ans:3},
+  {q:"Runway ML is primarily used for:",opts:["Music composition","3D modelling","AI-powered video generation and editing","Logo and brand design"],ans:2},
+  {q:"Which AI tool introduced 'Artifacts' — shareable, runnable mini-apps generated inside chat?",opts:["ChatGPT","Claude","Gemini","Perplexity"],ans:1},
+  {q:"Google's NotebookLM helps you:",opts:["Take handwritten notes digitally","Deeply analyse and query your own uploaded documents","Generate images from notes","Auto-write research papers"],ans:1},
+  {q:"Perplexity AI is best described as:",opts:["A creative writing assistant","An AI-powered answer engine that cites its sources","A code editor","A text-to-image generator"],ans:1},
+  {q:"HuggingFace is best described as:",opts:["An AI chip startup","The GitHub of AI — a platform for sharing and running open-source models","An AI safety research lab","A consumer AI assistant"],ans:1},
+  {q:"Suno AI is best known for generating which type of content?",opts:["Photorealistic images","AI-generated videos","Full songs and music with vocals","3D printable models"],ans:2},
+  {q:"Cohere is focused primarily on which market segment?",opts:["Consumer entertainment","Enterprise NLP at scale — search, summarisation, classification","Personal productivity apps","AI-generated art platforms"],ans:1},
+  {q:"DALL-E 2 made which image editing capability mainstream?",opts:["Style transfer","Inpainting — editing specific parts of an image","Super-resolution upscaling","Real-time video generation"],ans:1},
+  {q:"Which AI assistant from Meta is integrated into Instagram, WhatsApp and Messenger?",opts:["Meta Claude","Meta AI","Meta Copilot","Spark AI"],ans:1},
+  {q:"Google's Gemini 1.5 Pro impressed the research community with what unprecedented capability?",opts:["Generating 4K video","Processing up to 1 million tokens in a single context window","Solving math proofs in real time","Generating music from text"],ans:1},
+  {q:"Which AI company's API became so widely used that many competitors now mimic its interface?",opts:["Google","Anthropic","OpenAI","Cohere"],ans:2},
+  {q:"Grok — xAI's AI assistant — is primarily accessible through which platform?",opts:["Telegram","Reddit","X (formerly Twitter)","Discord"],ans:2},
+  {q:"The primary purpose of OpenAI's Whisper is:",opts:["AI image generation","Speech-to-text transcription across many languages","A mental health chatbot","Music generation from text"],ans:1},
+  {q:"Which company created the 'Gemma' family of lightweight open AI models?",opts:["Meta","Microsoft","Google","Mistral AI"],ans:2},
+  {q:"Stable Diffusion's biggest practical advantage over Midjourney and DALL-E was:",opts:["Better image quality","Faster generation speed","Being fully open-source and runnable locally","Cheaper API pricing"],ans:2},
+  {q:"Scale AI is best known for providing AI companies with:",opts:["GPU compute at scale","High-quality human data labelling and AI evaluation services","Foundation model training","AI safety audits"],ans:1},
+  {q:"Adobe Firefly is trained on which type of data to avoid copyright issues?",opts:["All publicly available internet images","Licensed and public-domain content only","Only images users upload","Synthetically generated data"],ans:1},
+  {q:"Otter.ai is designed specifically for:",opts:["Generating images from text","Transcribing and summarising meetings and conversations","Writing legal documents","Managing support tickets"],ans:1},
+  {q:"Which AI tool is specifically designed for automated business workflows without writing code?",opts:["Notion AI","Zapier AI","ElevenLabs","Perplexity"],ans:1},
+  {q:"Which company created the 'Gemma' family of lightweight open AI models?",opts:["Meta","Microsoft","Google","Mistral AI"],ans:2},
+  {q:"Claude's 'Projects' feature allows users to:",opts:["Create shareable public chatbots","Maintain persistent memory and context across multiple conversations","Run Claude on local hardware","Schedule automated AI tasks"],ans:1},
+  {q:"Which AI tool is built into Microsoft Edge browser natively?",opts:["ChatGPT","Gemini","Copilot","Claude"],ans:2},
+  {q:"Google's AI-powered search feature that summarises results at the top is called:",opts:["Google Bard","AI Overviews","Search Generative Experience","Gemini Search"],ans:1},
+  {q:"Replit AI is primarily used for:",opts:["AI image generation","Coding and running code in the browser with AI assistance","AI-powered video editing","Business workflow automation"],ans:1},
+  {q:"Which AI model powers Apple's on-device intelligence features on iPhone?",opts:["Gemini Nano","GPT-4o mini","Apple's own Ajax / on-device models","Llama 3"],ans:2},
+  {q:"Midjourney primarily operates through which platform?",opts:["A dedicated website","Discord","Slack","X (Twitter)"],ans:1},
+  {q:"What is Anthropic's Claude primarily designed to prioritise above capability?",opts:["Speed","Cost efficiency","Safety and honesty","Multimodal ability"],ans:2},
+  {q:"NotebookLM is a product from which company?",opts:["Microsoft","OpenAI","Google","Anthropic"],ans:2},
+  {q:"Which AI coding assistant was acquired by GitHub (Microsoft) and integrated into VS Code?",opts:["Tabnine","Codeium","Copilot","Cursor"],ans:2},
+  {q:"Gemini Advanced is Google's premium AI tier. Which model powers it?",opts:["Gemini Pro","Gemini Ultra","Gemini 1.5 Pro","Gemini Nano"],ans:1},
+  {q:"What is the primary use case of Synthesia AI?",opts:["Music generation","AI avatar video creation without a camera","Voice cloning","Code generation"],ans:1},
+  {q:"Claude's 'Constitutional AI' approach was designed to make the model:",opts:["Faster at inference","Helpful, harmless and honest","More creative","Better at coding"],ans:1},
+  {q:"Which company makes the Firefly AI image generation tool built into Adobe products?",opts:["OpenAI","Google","Adobe","Stability AI"],ans:2},
+  {q:"Pika Labs is known for creating:",opts:["AI music","AI text-to-video generation","AI voice synthesis","AI coding tools"],ans:1},
+  {q:"Which AI tool from Microsoft helps users generate PowerPoint presentations from prompts?",opts:["Copilot in PowerPoint","Designer AI","Microsoft Sway","Bing Create"],ans:0},
+  {q:"What does the 'o' in OpenAI's o1, o3 model names stand for?",opts:["Optimised","Omni","Reasoning (no official meaning released)","Open"],ans:2},
+  {q:"Llama 3 — Meta's open model — was released in which year?",opts:["2022","2023","2024","2025"],ans:2},
+  {q:"Which AI tool is specifically designed to help with academic research and citing sources?",opts:["Jasper","Consensus AI","Copy.ai","Writesonic"],ans:1},
+  {q:"Google's AI coding assistant integrated into Android Studio is called:",opts:["Gemini Code Assist","Bard for Developers","Studio Bot","Code Gemini"],ans:0},
+  {q:"Anthropic released which Claude model as its most intelligent ever in early 2025?",opts:["Claude 3.5 Sonnet","Claude 3 Opus","Claude 3.7 Sonnet","Claude 4"],ans:2},
+  {q:"Which AI tool allows users to create and share custom AI personas called 'GPTs'?",opts:["Claude","Gemini","ChatGPT","Perplexity"],ans:2},
+  {q:"Veo 2 is a video generation model created by:",opts:["OpenAI","Meta","Google DeepMind","Runway"],ans:2},
+  {q:"Which AI model was the first to score above human average on the bar exam?",opts:["Claude 2","GPT-3.5","GPT-4","Gemini Ultra"],ans:2},
+  {q:"Groq is known for providing AI inference that is significantly:",opts:["Cheaper than competitors","Faster than GPU-based inference using custom LPU chips","More accurate than GPT-4","More private than cloud AI"],ans:1},
+  {q:"Which company developed the Phi series of small but capable language models?",opts:["Google","Meta","Microsoft","Mistral AI"],ans:2},
+  {q:"OpenAI's real-time voice feature allowing natural spoken conversation with ChatGPT is called:",opts:["Voice Mode","Advanced Voice","Sonic AI","GPT Voice"],ans:1},
+  {q:"Ideogram AI is a tool focused on:",opts:["AI video generation","AI image generation with strong text rendering","AI music creation","Code generation"],ans:1},
+  {q:"Which AI tool helps software teams automatically write and run tests?",opts:["GitHub Copilot","Devin","CodiumAI","Tabnine"],ans:2},
+  {q:"Devin — launched in 2024 — was described as the world's first:",opts:["AI product manager","Fully autonomous AI software engineer","AI UX designer","AI data scientist"],ans:1},
+  {q:"Which search engine integrates AI answers natively and was one of the first to do so at scale?",opts:["DuckDuckGo","Bing (Microsoft)","Yahoo","Brave Search"],ans:1},
+  {q:"Claude's context window in Claude 3.5 is approximately:",opts:["32,000 tokens","64,000 tokens","128,000 tokens","200,000 tokens"],ans:3},
+  {q:"Which AI platform lets developers run open-source models via API without managing infrastructure?",opts:["Replicate","Vercel","Netlify","Railway"],ans:0},
+  {q:"Sora by OpenAI can generate videos of up to how long?",opts:["10 seconds","30 seconds","60 seconds","5 minutes"],ans:2},
+  {q:"Which AI tool is embedded in Notion to help with writing and summarisation?",opts:["Notion GPT","Notion AI","Notion Copilot","Notion Claude"],ans:1},
+],
+
+numbers:[
+  {q:"GPT-3 has approximately how many parameters?",opts:["17 billion","75 billion","175 billion","1.75 trillion"],ans:2},
+  {q:"ChatGPT reached 100 million users in approximately how long — the fastest consumer app ever at the time?",opts:["1 week","1 month","2 months","6 months"],ans:2},
+  {q:"How many images are in the ImageNet dataset?",opts:["1.4 million","14 million","140 million","1.4 billion"],ans:1},
+  {q:"At its June 2024 peak, NVIDIA's market cap briefly reached approximately:",opts:["$1 trillion","$2 trillion","$3.3 trillion","$5 trillion"],ans:2},
+  {q:"AlphaFold released predicted structures for approximately how many proteins in 2022?",opts:["2 million","20 million","200 million","2 billion"],ans:2},
+  {q:"Anthropic raised approximately how much in total funding by end of 2024?",opts:["$730 million","$2.4 billion","$7.3 billion","$12 billion"],ans:2},
+  {q:"DeepSeek R1 reportedly cost approximately how much to train?",opts:["$56,000","$560,000","$5.6 million","$56 million"],ans:2},
+  {q:"NVIDIA's stock fell by approximately what percentage in a single day after DeepSeek's release?",opts:["7%","11%","17%","23%"],ans:2},
+  {q:"Gemini 1.5 Pro's maximum context window is approximately:",opts:["128,000 tokens","200,000 tokens","500,000 tokens","1,000,000 tokens"],ans:3},
+  {q:"GPT-4 was estimated to be trained on approximately how many tokens?",opts:["100 billion","500 billion","1 trillion","13 trillion"],ans:3},
+  {q:"How many humanoid robot manufacturers reportedly existed in China by 2025?",opts:["14","40","140","400"],ans:2},
+  {q:"OpenAI's annualised revenue run rate was approximately how much by end of 2024?",opts:["$1 billion","$3.4 billion","$6 billion","$12 billion"],ans:1},
+  {q:"ChatGPT had approximately how many weekly active users by early 2024?",opts:["10 million","50 million","100 million","200 million"],ans:3},
+  {q:"How much did Microsoft invest in OpenAI across multiple rounds by 2023?",opts:["$1 billion","$3 billion","$10 billion","$13 billion"],ans:3},
+  {q:"The 'Chinchilla' paper showed optimal training uses roughly how many tokens per parameter?",opts:["5 tokens","10 tokens","20 tokens","100 tokens"],ans:2},
+  {q:"GPT-4 reportedly has approximately how many parameters? (leaked estimates)",opts:["175 billion","500 billion","1 trillion","1.8 trillion"],ans:3},
+  {q:"How much did Elon Musk's xAI raise in its 2024 Series B funding round?",opts:["$500 million","$1 billion","$6 billion","$24 billion"],ans:2},
+  {q:"Google spent approximately how much to acquire DeepMind in 2014?",opts:["$400 million","$650 million","$1.2 billion","$2.5 billion"],ans:1},
+  {q:"OpenAI's compute cluster for training GPT-4 reportedly used approximately how many A100 GPUs?",opts:["1,000","10,000","25,000","100,000"],ans:3},
+  {q:"The global AI chip market was valued at approximately how much in 2024?",opts:["$50 billion","$100 billion","$200 billion","$500 billion"],ans:1},
+  {q:"Amazon invested approximately how much into Anthropic by 2024?",opts:["$1.5 billion","$4 billion","$7.5 billion","$12 billion"],ans:1},
+  {q:"How many parameters does the Mistral 7B model have?",opts:["3 billion","7 billion","13 billion","34 billion"],ans:1},
+  {q:"The GPT-3 training run cost approximately how much in compute?",opts:["$1 million","$4.6 million","$12 million","$50 million"],ans:1},
+  {q:"The average novel is approximately how many tokens?",opts:["50,000","100,000","200,000","500,000"],ans:1},
+  {q:"What approximate percentage of Fortune 500 companies reported using generative AI in some form by 2024?",opts:["10%","25%","50%","75%+"],ans:3},
+  {q:"OpenAI's 'Stargate' US AI infrastructure project announced in early 2025 plans to invest approximately:",opts:["$10 billion","$50 billion","$100 billion","$500 billion"],ans:3},
+  {q:"The training compute for GPT-3 was estimated at roughly:",opts:["10^18 FLOP","10^21 FLOP","10^23 FLOP","10^26 FLOP"],ans:2},
+  {q:"How many scientific papers mentioning 'AI' were published approximately per year by 2023?",opts:["50,000","150,000","500,000","1 million+"],ans:2},
+  {q:"Scale AI was valued at approximately how much in its 2024 funding round?",opts:["$3.5 billion","$7 billion","$13.8 billion","$50 billion"],ans:2},
+  {q:"How much did the US government commit to the CHIPS Act to boost domestic semiconductor manufacturing?",opts:["$12 billion","$39 billion","$52 billion","$100 billion"],ans:2},
+  {q:"By 2024 how many developers had signed up to use the OpenAI API platform?",opts:["100,000","500,000","2 million","Over 3 million"],ans:3},
+  {q:"Claude 3 Opus, released March 2024, scored approximately what on the MMLU benchmark?",opts:["76%","82%","86%","92%"],ans:3},
+  {q:"How many hours of video are uploaded to YouTube every minute?",opts:["100 hours","500 hours","1,000 hours","10,000 hours"],ans:1},
+  {q:"GPT-1 had approximately how many parameters?",opts:["12 million","117 million","1.5 billion","17 billion"],ans:1},
+  {q:"Stable Diffusion's LAION-5B training dataset contained approximately how many image-text pairs?",opts:["500 million","1 billion","5 billion","50 billion"],ans:2},
+  {q:"GPT-4o was released in which month and year?",opts:["January 2024","March 2024","May 2024","August 2024"],ans:2},
+  {q:"Anthropic's Claude 3 Opus was released in which year?",opts:["2022","2023","2024","2025"],ans:2},
+  {q:"How many languages does Meta's NLLB-200 translation model support?",opts:["50","100","200","500"],ans:2},
+  {q:"The Llama 3 70B model has approximately how many parameters?",opts:["7 billion","13 billion","34 billion","70 billion"],ans:3},
+  {q:"OpenAI's valuation reached approximately how much in its 2024 funding round?",opts:["$29 billion","$57 billion","$86 billion","$157 billion"],ans:3},
+  {q:"Google's TPU (Tensor Processing Unit) was first deployed internally in which year?",opts:["2013","2015","2016","2018"],ans:2},
+  {q:"Mistral 7B outperformed Llama 2 of what size on most benchmarks?",opts:["7B","13B","34B","70B"],ans:1},
+  {q:"The MMLU benchmark covers how many academic subjects?",opts:["14","28","57","100"],ans:2},
+  {q:"How many parameters does Google's Gemini Ultra reportedly have?",opts:["175 billion","540 billion","1 trillion","Not publicly disclosed"],ans:3},
+  {q:"Claude 3.5 Sonnet's context window is how many tokens?",opts:["32,000","64,000","128,000","200,000"],ans:3},
+  {q:"xAI's Grok-1 open-source model has approximately how many parameters?",opts:["70 billion","140 billion","314 billion","500 billion"],ans:2},
+  {q:"The first GPT-4 technical report listed approximately how many pages?",opts:["15","50","100","200"],ans:0},
+  {q:"Meta AI is used by approximately how many people per month as of 2024?",opts:["100 million","200 million","400 million","500 million+"],ans:3},
+  {q:"How many tokens per second can Groq's LPU inference chip process compared to typical GPU speeds?",opts:["2x faster","5x faster","10x faster","Up to 18x faster"],ans:3},
+  {q:"Runway Gen-3 Alpha can generate videos at up to how many frames per second?",opts:["12fps","24fps","30fps","60fps"],ans:1},
+  {q:"The Human Eval benchmark for code generation was scored at what percent by GPT-4?",opts:["48%","67%","87%","95%"],ans:2},
+  {q:"How much did Microsoft pay to license OpenAI technology as part of their partnership?",opts:["$1 billion (2019 investment)","$3 billion","$10 billion","$13 billion (total by 2023)"],ans:3},
+  {q:"Google's PaLM 2 model was trained on approximately how many tokens?",opts:["340 billion","780 billion","3.6 trillion","10 trillion"],ans:2},
+  {q:"The average cost to generate 1 million tokens with GPT-4 Turbo in 2024 was approximately:",opts:["$1","$10","$30","$100"],ans:1},
+  {q:"How many parameters does the Mixtral 8x7B model have in total (all experts combined)?",opts:["7 billion","14 billion","46.7 billion","56 billion"],ans:2},
+  {q:"ElevenLabs was valued at approximately how much in its 2024 Series B?",opts:["$500 million","$1.1 billion","$3 billion","$5 billion"],ans:1},
+  {q:"How many words approximately can fit in a 100,000 token context window?",opts:["10,000 words","25,000 words","75,000 words","150,000 words"],ans:2},
+  {q:"Anthropic's Claude 3.5 Sonnet scored approximately what on the SWE-bench coding benchmark?",opts:["12%","29%","49%","72%"],ans:2},
+  {q:"OpenAI reportedly had approximately how many employees at the start of 2024?",opts:["500","770","1,500","3,000"],ans:1},
+  {q:"The AI safety nonprofit 'Centre for Human-Compatible AI' (CHAI) was founded in which year?",opts:["2014","2016","2018","2020"],ans:1},
+  {q:"Stability AI raised approximately how much in its 2022 funding round at a $1 billion valuation?",opts:["$50 million","$101 million","$250 million","$500 million"],ans:1},
+  {q:"How many tokens per minute can Claude 3.5 Sonnet process via the API (rate limit tier)?",opts:["40,000","80,000","160,000","400,000"],ans:2},
+  {q:"The largest model in the Gemma 2 family has how many parameters?",opts:["2 billion","7 billion","9 billion","27 billion"],ans:3},
+  {q:"Meta's LLaMA 2 was trained on approximately how many tokens?",opts:["1 trillion","2 trillion","3 trillion","5 trillion"],ans:1},
+  {q:"How much did Adobe pay to train Firefly on licensed content, approximately?",opts:["$10 million","$90 million","$250 million","$1 billion"],ans:1},
+  {q:"Perplexity AI reached what monthly active user count by mid-2024?",opts:["5 million","10 million","50 million","100 million"],ans:1},
+  {q:"The H100 GPU from NVIDIA costs approximately how much per unit (list price)?",opts:["$5,000","$15,000","$30,000","$40,000"],ans:2},
+  {q:"AlphaFold 3 was released in which year?",opts:["2022","2023","2024","2025"],ans:2},
+  {q:"How many parameters does the Phi-3 Mini model from Microsoft have?",opts:["1.3 billion","3.8 billion","7 billion","14 billion"],ans:1},
+],
+
+};
+</script>
+</body>
+</html>
