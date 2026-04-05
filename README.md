@@ -30,23 +30,6 @@ AIQ is a free, daily AI quiz and trivia game. Test your knowledge across AI hist
 | 🎨 Spot the Logo | Identify AI brands from their visual marks |
 | 🎲 Misc Mix | Random questions from all categories |
 
----
-
-## How to Run Locally
-
-No install needed. Just open the file in any browser:
-
-```bash
-# Clone the repo
-git clone https://github.com/devanshiagarwal1034/aiq-quiz.git
-
-# Open in browser
-open index.html
-```
-
-Or simply double-click `index.html` on your computer.
-
----
 
 ## Leaderboard Setup
 
@@ -79,11 +62,6 @@ aiq-quiz/
 
 Found a wrong answer or want to suggest new questions? Open an issue or submit a pull request. All contributions welcome!
 
----
-
-## License
-
-MIT License — free to use, modify, and share.
 
 ---
 
