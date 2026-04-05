@@ -62,7 +62,3 @@ aiq-quiz/
 
 Found a wrong answer or want to suggest new questions? Open an issue or submit a pull request. All contributions welcome!
 
-
----
-
-*Built with ❤️ for AI enthusiasts everywhere.*
