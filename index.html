@@ -111,9 +111,6 @@ h1.hero .accent{background:linear-gradient(135deg,var(--accent),var(--accent2));
 .nav-btn{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:0.72rem;letter-spacing:0.03em;color:var(--ink3);background:none;border:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 20px;border-radius:10px;transition:var(--transition);min-width:70px;}
 .nav-btn:hover,.nav-btn.active{color:var(--accent);background:var(--accent-light);}
 .nav-icon{font-size:1.1rem;}
-.setup-panel{background:var(--surface2);border:1.5px solid var(--border);border-radius:var(--rs);padding:1rem;margin-bottom:1rem;display:none;}
-.setup-note{font-size:0.78rem;color:var(--ink3);line-height:1.5;margin-bottom:0.75rem;}
-.setup-note code{font-family:'JetBrains Mono',monospace;background:var(--border);padding:2px 5px;border-radius:4px;font-size:0.72rem;}
 .confetti-wrap{position:fixed;inset:0;pointer-events:none;z-index:200;overflow:hidden;}
 .c-dot{position:absolute;border-radius:3px;animation:confFall linear forwards;}
 @keyframes confFall{0%{transform:translateY(-30px) rotate(0deg);opacity:1}100%{transform:translateY(110vh) rotate(720deg);opacity:0}}
@@ -123,6 +120,9 @@ h1.hero .accent{background:linear-gradient(135deg,var(--accent),var(--accent2));
 .spinner{width:28px;height:28px;border:2.5px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin 0.7s linear infinite;margin:1rem auto;}
 @keyframes spin{to{transform:rotate(360deg)}}
 .info-note{font-size:0.78rem;color:var(--ink3);text-align:center;margin-top:0.75rem;font-weight:400;}
+.lb-source-badge{font-family:'JetBrains Mono',monospace;font-size:0.65rem;font-weight:600;padding:2px 8px;border-radius:6px;display:inline-flex;align-items:center;gap:4px;}
+.lb-source-badge.live{background:#EDFAF5;color:var(--green);border:1px solid var(--green-border);}
+.lb-source-badge.local{background:var(--accent-light);color:var(--accent);border:1px solid var(--border-strong);}
 </style>
 </head>
 <body>
@@ -143,7 +143,6 @@ h1.hero .accent{background:linear-gradient(135deg,var(--accent),var(--accent2));
   <div class="card au" style="animation-delay:0.1s">
     <div class="sec-label">Enter the Arena</div>
     <input type="text" class="txt-input" id="nick-input" placeholder="Enter a nickname to get started..." maxlength="20" autocomplete="off">
-
     <button class="btn btn-primary" onclick="startFromHome()">Start Playing →</button>
     <div class="divider"></div>
     <div class="flex-btns">
@@ -256,7 +255,10 @@ h1.hero .accent{background:linear-gradient(135deg,var(--accent),var(--accent2));
       <button id="lb-tab-today" onclick="switchLbTab('today')" class="btn" style="flex:1;justify-content:center;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;border-radius:50px;font-size:0.85rem;padding:0.65rem;">📅 Today</button>
       <button id="lb-tab-alltime" onclick="switchLbTab('alltime')" class="btn btn-outline" style="flex:1;justify-content:center;border-radius:50px;font-size:0.85rem;padding:0.65rem;">🏅 All Time</button>
     </div>
-    <div class="sec-label" id="lb-subtitle">Today's top players</div>
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.75rem;">
+      <div class="sec-label" style="margin-bottom:0;flex:1;" id="lb-subtitle">Today's top players</div>
+      <span id="lb-source-indicator"></span>
+    </div>
     <div id="lb-list"></div>
     <div id="lb-loading" style="display:none"><div class="spinner"></div></div>
     <div class="divider"></div>
@@ -271,9 +273,18 @@ h1.hero .accent{background:linear-gradient(135deg,var(--accent),var(--accent2));
 </div>
 
 <script>
-const S={nick:'',cat:'',qIdx:0,score:0,answered:false,qs:[],streak:+localStorage.getItem('aiku_streak')||0,lastDay:localStorage.getItem('aiku_last')||'',jbKey:localStorage.getItem('aiku_jbkey')||'$2a$10$F0k8bAswd2ZbQQ86JXxmA.QAR./hd4IKQZ65BVWMPrKIDUfR10SUa',jbId:localStorage.getItem('aiku_jbid')||'69d29191856a682189007de7'};
+// ─── State ────────────────────────────────────────────
+const S={
+  nick:'',cat:'',qIdx:0,score:0,answered:false,qs:[],
+  streak:+localStorage.getItem('aiku_streak')||0,
+  lastDay:localStorage.getItem('aiku_last')||'',
+  jbKey:localStorage.getItem('aiku_jbkey')||'$2a$10$F0k8bAswd2ZbQQ86JXxmA.QAR./hd4IKQZ65BVWMPrKIDUfR10SUa',
+  jbId:localStorage.getItem('aiku_jbid')||'69d29191856a682189007de7'
+};
+
+// ─── Helpers ──────────────────────────────────────────
 function dateStr(){return new Date().toISOString().split('T')[0];}
-function seededRng(seed){let s=seed>>>0;return()=>{s=(Math.imul(s,1664525)+1013904223)>>>0;return s/0xFFFFFFFF};}
+function seededRng(seed){let s=seed>>>0;return()=>{s=(Math.imul(s,1664525)+1013904223)>>>0;return s/0xFFFFFFFF;};}
 function hashStr(str){let h=2166136261>>>0;for(let i=0;i<str.length;i++){h^=str.charCodeAt(i);h=Math.imul(h,16777619)>>>0;}return h;}
 function seededShuffle(arr,seed){const a=[...arr];const rng=seededRng(seed);for(let i=a.length-1;i>0;i--){const j=Math.floor(rng()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
 function getDailyQuestions(cat){
@@ -281,83 +292,245 @@ function getDailyQuestions(cat){
   if(cat==='misc'){const cats=['history','concepts','tools','numbers','logos'];let pool=[];cats.forEach(c=>{pool.push(...seededShuffle(QUESTIONS[c],hashStr(dateStr()+':misc:'+c)).slice(0,2));});return seededShuffle(pool,seed);}
   return seededShuffle(QUESTIONS[cat],seed).slice(0,10);
 }
+
+// ─── JSONBin API ──────────────────────────────────────
 const JB='https://api.jsonbin.io/v3';
-async function lbFetch(){if(!S.jbKey||!S.jbId)return null;try{const r=await fetch(`${JB}/b/${S.jbId}/latest`,{headers:{'X-Master-Key':S.jbKey}});if(!r.ok)return null;return(await r.json()).record?.entries||[];}catch{return null;}}
-async function lbSave(e){if(!S.jbKey||!S.jbId)return;try{const cur=await lbFetch()||[];cur.push(e);cur.sort((a,b)=>b.pts-a.pts||b.score-a.score);await fetch(`${JB}/b/${S.jbId}`,{method:'PUT',headers:{'Content-Type':'application/json','X-Master-Key':S.jbKey},body:JSON.stringify({entries:cur.slice(0,200)})});}catch(e){}}
+
+async function lbFetch(){
+  if(!S.jbKey||!S.jbId)return null;
+  try{
+    const r=await fetch(`${JB}/b/${S.jbId}/latest`,{
+      headers:{'X-Master-Key':S.jbKey,'Cache-Control':'no-cache'}
+    });
+    if(!r.ok)return null;
+    const data=await r.json();
+    return data.record?.entries||[];
+  }catch(e){console.warn('lbFetch failed:',e);return null;}
+}
+
+async function lbSave(entry){
+  if(!S.jbKey||!S.jbId)return;
+  try{
+    const cur=await lbFetch()||[];
+    cur.push(entry);
+    cur.sort((a,b)=>b.pts-a.pts||b.score-a.score);
+    await fetch(`${JB}/b/${S.jbId}`,{
+      method:'PUT',
+      headers:{'Content-Type':'application/json','X-Master-Key':S.jbKey},
+      body:JSON.stringify({entries:cur.slice(0,500)})
+    });
+  }catch(e){console.warn('lbSave failed:',e);}
+}
+
+// ─── Local leaderboard fallback ───────────────────────
 let localLB=JSON.parse(localStorage.getItem('aiku_lb')||'[]');
-function saveLocal(e){localLB.push(e);localLB.sort((a,b)=>b.pts-a.pts||b.score-a.score);localLB=localLB.slice(0,100);localStorage.setItem('aiku_lb',JSON.stringify(localLB));}
+function saveLocal(entry){
+  localLB.push(entry);
+  localLB.sort((a,b)=>b.pts-a.pts||b.score-a.score);
+  localLB=localLB.slice(0,200);
+  localStorage.setItem('aiku_lb',JSON.stringify(localLB));
+}
+
+// ─── Leaderboard UI ──────────────────────────────────
 let lbAllEntries=[];
 let lbCurrentTab='today';
+
 function switchLbTab(tab){
   lbCurrentTab=tab;
   const todayBtn=document.getElementById('lb-tab-today');
   const alltimeBtn=document.getElementById('lb-tab-alltime');
   if(tab==='today'){
-    todayBtn.style.background='linear-gradient(135deg,var(--accent),var(--accent2))';todayBtn.style.color='#fff';todayBtn.classList.remove('btn-outline');
-    alltimeBtn.style.background='transparent';alltimeBtn.style.color='var(--ink2)';alltimeBtn.classList.add('btn-outline');
+    todayBtn.style.background='linear-gradient(135deg,var(--accent),var(--accent2))';
+    todayBtn.style.color='#fff';
+    todayBtn.classList.remove('btn-outline');
+    alltimeBtn.style.background='transparent';
+    alltimeBtn.style.color='var(--ink2)';
+    alltimeBtn.classList.add('btn-outline');
     document.getElementById('lb-subtitle').textContent="Today's top players";
-  } else {
-    alltimeBtn.style.background='linear-gradient(135deg,var(--accent),var(--accent2))';alltimeBtn.style.color='#fff';alltimeBtn.classList.remove('btn-outline');
-    todayBtn.style.background='transparent';todayBtn.style.color='var(--ink2)';todayBtn.classList.add('btn-outline');
+  }else{
+    alltimeBtn.style.background='linear-gradient(135deg,var(--accent),var(--accent2))';
+    alltimeBtn.style.color='#fff';
+    alltimeBtn.classList.remove('btn-outline');
+    todayBtn.style.background='transparent';
+    todayBtn.style.color='var(--ink2)';
+    todayBtn.classList.add('btn-outline');
     document.getElementById('lb-subtitle').textContent='All-time top players';
   }
   renderLbList(lbAllEntries,tab);
 }
+
 function renderLbList(entries,tab){
   const list=document.getElementById('lb-list');
   list.innerHTML='';
   const today=dateStr();
-  const filtered=tab==='today'?entries.filter(e=>e.day===today):entries;
-  const sorted=[...filtered].sort((a,b)=>b.pts-a.pts||b.score-a.score).slice(0,15);
-  if(!sorted.length){list.innerHTML='<p style="text-align:center;color:var(--ink3);padding:1rem">'+(tab==='today'?'No scores today yet — be the first! 🚀':'No scores yet — be the first! 🚀')+'</p>';return;}
+
+  // Filter for today tab — entries where day matches today
+  const filtered=(tab==='today')
+    ? entries.filter(e=>e.day===today)
+    : entries; // all-time: show everything, sorted by pts
+
+  // Sort: highest pts first, then highest score as tiebreaker
+  const sorted=[...filtered]
+    .sort((a,b)=>b.pts-a.pts||b.score-a.score)
+    .slice(0,15);
+
+  if(!sorted.length){
+    list.innerHTML='<p style="text-align:center;color:var(--ink3);padding:1.5rem 1rem">'
+      +(tab==='today'
+        ? 'No scores today yet — be the first! 🚀'
+        : 'No scores yet — be the first! 🚀')
+      +'</p>';
+    return;
+  }
+
   sorted.forEach((e,i)=>{
     const isMe=e.nick===S.nick;
     const row=document.createElement('div');
     row.className='lb-row'+(isMe?' me':'');
     row.style.animationDelay=i*0.05+'s';
-    row.innerHTML='<div class="lb-rank">'+(i+1)+'</div><div style="flex:1;min-width:0"><span class="lb-nick">'+e.nick+(isMe?' <span style="font-size:0.7rem;color:var(--accent)">(you)</span>':'')+'</span><span class="lb-cat">'+e.cat+(tab==='alltime'&&e.day?' · '+e.day:'')+'</span></div><div class="lb-pts">'+e.pts+'pts</div>';
+    const dateInfo=(tab==='alltime'&&e.day)
+      ? ' · <span style="opacity:0.7">'+e.day+'</span>'
+      : '';
+    row.innerHTML=
+      '<div class="lb-rank">'+(i+1)+'</div>'
+      +'<div style="flex:1;min-width:0">'
+        +'<span class="lb-nick">'+escHtml(e.nick)
+          +(isMe?' <span style="font-size:0.7rem;color:var(--accent)">(you)</span>':'')
+        +'</span>'
+        +'<span class="lb-cat">'+escHtml(e.cat)+dateInfo+'</span>'
+      +'</div>'
+      +'<div class="lb-pts">'+e.pts+'pts</div>';
     list.appendChild(row);
   });
 }
+
+function escHtml(s){
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ─── THE ONE TRUE showLeaderboard ────────────────────
 async function showLeaderboard(){
   showScreen('leaderboard');
+
+  // Reset to today tab
   lbCurrentTab='today';
-  switchLbTab('today');
+  document.getElementById('lb-tab-today').style.background='linear-gradient(135deg,var(--accent),var(--accent2))';
+  document.getElementById('lb-tab-today').style.color='#fff';
+  document.getElementById('lb-tab-today').classList.remove('btn-outline');
+  document.getElementById('lb-tab-alltime').style.background='transparent';
+  document.getElementById('lb-tab-alltime').style.color='var(--ink2)';
+  document.getElementById('lb-tab-alltime').classList.add('btn-outline');
+  document.getElementById('lb-subtitle').textContent="Today's top players";
+
+  const list=document.getElementById('lb-list');
   const loading=document.getElementById('lb-loading');
-  document.getElementById('lb-list').innerHTML='';
+  const indicator=document.getElementById('lb-source-indicator');
+  list.innerHTML='';
   loading.style.display='block';
+  indicator.innerHTML='';
+
+  // Always fetch fresh from JSONBin (bypass any cached state)
   let entries=null;
-  if(S.jbKey&&S.jbId){entries=await lbFetch();}
-  lbAllEntries=entries||localLB;
+  if(S.jbKey&&S.jbId){
+    entries=await lbFetch();
+  }
+
   loading.style.display='none';
+
+  if(entries!==null){
+    lbAllEntries=entries;
+    indicator.innerHTML='<span class="lb-source-badge live">🌍 Live</span>';
+  }else{
+    lbAllEntries=localLB;
+    indicator.innerHTML='<span class="lb-source-badge local">💾 Local</span>';
+  }
+
   renderLbList(lbAllEntries,'today');
 }
+
+// ─── Feedback pools ───────────────────────────────────
 const FB_OK=["✅ Nailed it!","🔥 You knew!","⭐ Spot on!","🎯 Correct!","🤩 Boom!","✨ Perfect!","💡 Yes!","🏆 On fire!","🌟 Brilliant!","🎉 Exactly right!","🚀 Got it!","😎 Easy work!","💎 Flawless!","🧬 Sharp brain!","⚡ Instant recall!"];
 const FB_NO=["❌ Not quite!","😬 Nope!","💀 Wrong one!","🧠 Close miss!","😅 Nearly there!","🤖 Error detected!","📚 Learn that!","😤 Not it!","🌱 Keep going!","💪 Try harder!","🎭 Bold miss!","😂 Nah!","🫠 Wrong!","🐦 Not quite!","🔮 Off target!"];
-function getResultQuote(score,nick){const r=n=>Math.floor(Math.random()*n);if(score===10)return[`${nick}, you are built different. You might literally BE the training data.`,`Flawless, ${nick}! Turing would be proud. Or jealous.`,`10/10?! ${nick}, are you a GPT wrapper with a human-shaped username?`,`${nick} = 100% accuracy. Silicon Valley would like to acquire you.`][r(4)];if(score>=8)return[`Almost perfect, ${nick}! Those ${10-score} misses slipped like hallucinated facts.`,`Solid work, ${nick}. You clearly know your AI.`,`${nick}, the leaderboard trembles in your presence.`,`${nick}, 8–9 is the 'I read the papers' score. Respect.`][r(4)];if(score>=6)return[`Not bad, ${nick}! You passed the vibe check.`,`${nick}, 6–7 is the "AI Twitter expert" score. Go deeper!`,`You're in the middle of the bell curve, ${nick}. Time to escape it.`,`${nick}, you know enough to sound smart at parties.`][r(4)];if(score>=3)return[`${nick}, the AI revolution will not wait. Study up! 📚`,`Welp, ${nick}. At least you tried harder than most enterprise AI.`,`${nick}, that score is... a starting point. A humble one.`,`${nick}, even a random generator gets 2.5/10. You beat it. Slightly.`][r(4)];return[`${nick}, this score is proof AI education is urgently needed.`,`Rough one, ${nick}. Nowhere to go but up. Statistically.`,`${nick}, we believe in you. Not based on this quiz, but in general.`,`${nick}, a coin flip gets 5/10. But coins can't learn. You can.`][r(4)];}
-function showScreen(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById('screen-'+id).classList.add('active');document.getElementById('bottom-nav').style.display=['categories','quiz','result','leaderboard'].includes(id)?'flex':'none';['play','home','board'].forEach(n=>document.getElementById('nav-'+n).classList.remove('active'));if(id==='categories')document.getElementById('nav-play').classList.add('active');if(id==='home')document.getElementById('nav-home').classList.add('active');if(id==='leaderboard')document.getElementById('nav-board').classList.add('active');window.scrollTo(0,0);}
-function goCategories(){if(!S.nick){showScreen('home');return;}updateStreak();document.getElementById('streak-num').textContent=S.streak;document.getElementById('today-date').textContent=dateStr();showScreen('categories');}
 
-// ── Midnight auto-refresh ─────────────────────────────
+function getResultQuote(score,nick){
+  const r=n=>Math.floor(Math.random()*n);
+  if(score===10)return[`${nick}, you are built different. You might literally BE the training data.`,`Flawless, ${nick}! Turing would be proud. Or jealous.`,`10/10?! ${nick}, are you a GPT wrapper with a human-shaped username?`,`${nick} = 100% accuracy. Silicon Valley would like to acquire you.`][r(4)];
+  if(score>=8)return[`Almost perfect, ${nick}! Those ${10-score} misses slipped like hallucinated facts.`,`Solid work, ${nick}. You clearly know your AI.`,`${nick}, the leaderboard trembles in your presence.`,`${nick}, 8–9 is the 'I read the papers' score. Respect.`][r(4)];
+  if(score>=6)return[`Not bad, ${nick}! You passed the vibe check.`,`${nick}, 6–7 is the "AI Twitter expert" score. Go deeper!`,`You're in the middle of the bell curve, ${nick}. Time to escape it.`,`${nick}, you know enough to sound smart at parties.`][r(4)];
+  if(score>=3)return[`${nick}, the AI revolution will not wait. Study up! 📚`,`Welp, ${nick}. At least you tried harder than most enterprise AI.`,`${nick}, that score is... a starting point. A humble one.`,`${nick}, even a random generator gets 2.5/10. You beat it. Slightly.`][r(4)];
+  return[`${nick}, this score is proof AI education is urgently needed.`,`Rough one, ${nick}. Nowhere to go but up. Statistically.`,`${nick}, we believe in you. Not based on this quiz, but in general.`,`${nick}, a coin flip gets 5/10. But coins can't learn. You can.`][r(4)];
+}
+
+// ─── Screen management ────────────────────────────────
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById('screen-'+id).classList.add('active');
+  document.getElementById('bottom-nav').style.display=['categories','quiz','result','leaderboard'].includes(id)?'flex':'none';
+  ['play','home','board'].forEach(n=>document.getElementById('nav-'+n).classList.remove('active'));
+  if(id==='categories')document.getElementById('nav-play').classList.add('active');
+  if(id==='home')document.getElementById('nav-home').classList.add('active');
+  if(id==='leaderboard')document.getElementById('nav-board').classList.add('active');
+  window.scrollTo(0,0);
+}
+
+function goCategories(){
+  if(!S.nick){showScreen('home');return;}
+  updateStreak();
+  document.getElementById('streak-num').textContent=S.streak;
+  document.getElementById('today-date').textContent=dateStr();
+  showScreen('categories');
+}
+
+// ─── Midnight auto-refresh ────────────────────────────
 function scheduleMidnightRefresh(){
   const now=new Date();
   const msUntilMidnight=new Date(now.getFullYear(),now.getMonth(),now.getDate()+1,0,0,5).getTime()-now.getTime();
   setTimeout(()=>{
-    // Refresh date badge and streak display if on categories screen
     document.getElementById('today-date').textContent=dateStr();
     document.getElementById('streak-num').textContent=S.streak;
-    // Regenerate questions by resetting category state so next startQuiz uses new seed
     S.qs=[];
-    scheduleMidnightRefresh(); // schedule next midnight
+    scheduleMidnightRefresh();
   },msUntilMidnight);
 }
 scheduleMidnightRefresh();
-function startFromHome(){const nick=document.getElementById('nick-input').value.trim();if(!nick){const i=document.getElementById('nick-input');i.style.borderColor='var(--red)';i.style.boxShadow='0 0 0 3px rgba(240,78,55,0.12)';i.placeholder='A nickname! Any name. Even just "Bob".';setTimeout(()=>{i.style.borderColor='';i.style.boxShadow='';i.placeholder='Enter a nickname to get started...';},2200);return;}S.nick=nick;goCategories();}
-function toggleSetup(){}
-function updateStreak(){const today=dateStr();if(S.lastDay===today)return;const yesterday=new Date(Date.now()-86400000).toISOString().split('T')[0];S.streak=(S.lastDay===yesterday)?S.streak+1:1;S.lastDay=today;localStorage.setItem('aiku_streak',S.streak);localStorage.setItem('aiku_last',today);}
+
+function startFromHome(){
+  const nick=document.getElementById('nick-input').value.trim();
+  if(!nick){
+    const i=document.getElementById('nick-input');
+    i.style.borderColor='var(--red)';
+    i.style.boxShadow='0 0 0 3px rgba(240,78,55,0.12)';
+    i.placeholder='A nickname! Any name. Even just "Bob".';
+    setTimeout(()=>{i.style.borderColor='';i.style.boxShadow='';i.placeholder='Enter a nickname to get started...';},2200);
+    return;
+  }
+  S.nick=nick;
+  goCategories();
+}
+
+function updateStreak(){
+  const today=dateStr();
+  if(S.lastDay===today)return;
+  const yesterday=new Date(Date.now()-86400000).toISOString().split('T')[0];
+  S.streak=(S.lastDay===yesterday)?S.streak+1:1;
+  S.lastDay=today;
+  localStorage.setItem('aiku_streak',S.streak);
+  localStorage.setItem('aiku_last',today);
+}
+
+// ─── Quiz logic ───────────────────────────────────────
 const CAT_LABELS={history:'AI HISTORY',concepts:'AI CONCEPTS',tools:'AI TOOLS',numbers:'WILD NUMBERS',logos:'SPOT THE LOGO',misc:'MISC MIX'};
 const CAT_NAMES={history:'AI History',concepts:'AI Concepts',tools:'AI Tools',numbers:'Wild Numbers',logos:'Spot the Logo',misc:'Misc Mix'};
-function startQuiz(cat){S.cat=cat;S.qIdx=0;S.score=0;S.answered=false;S.qs=getDailyQuestions(cat);document.getElementById('q-cat-label').textContent=CAT_LABELS[cat];document.getElementById('live-score').textContent='0';showScreen('quiz');renderQ();}
+
+function startQuiz(cat){
+  S.cat=cat;S.qIdx=0;S.score=0;S.answered=false;
+  S.qs=getDailyQuestions(cat);
+  document.getElementById('q-cat-label').textContent=CAT_LABELS[cat];
+  document.getElementById('live-score').textContent='0';
+  showScreen('quiz');
+  renderQ();
+}
+
 function renderQ(){
   const q=S.qs[S.qIdx];
   const n=S.qIdx+1,tot=S.qs.length;
@@ -369,7 +542,7 @@ function renderQ(){
     logoArea.style.display='block';
     document.getElementById('logo-display').innerHTML=q.logo;
     qText.style.display='none';
-  } else {
+  }else{
     logoArea.style.display='none';
     qText.style.display='block';
     qText.textContent=q.q;
@@ -379,20 +552,79 @@ function renderQ(){
   ['A','B','C','D'].forEach((l,i)=>{
     const btn=document.createElement('button');
     btn.className='opt-btn';
-    btn.innerHTML='<span class="opt-key">'+l+'</span>'+q.opts[i];
+    btn.innerHTML='<span class="opt-key">'+l+'</span>'+escHtml(q.opts[i]);
     btn.onclick=()=>answer(i,btn);
     grid.appendChild(btn);
   });
-  S.answered=false;hideToast();
+  S.answered=false;
+  hideToast();
   const card=document.getElementById('q-card');
-  card.style.animation='none';void card.offsetWidth;card.style.animation='fadeUp 0.38s ease both';
+  card.style.animation='none';
+  void card.offsetWidth;
+  card.style.animation='fadeUp 0.38s ease both';
 }
-function answer(idx,btn){if(S.answered)return;S.answered=true;const q=S.qs[S.qIdx];const correct=idx===q.ans;const btns=document.querySelectorAll('.opt-btn');btns.forEach(b=>b.disabled=true);if(correct){btn.classList.add('correct');S.score++;document.getElementById('live-score').textContent=S.score;}else{btn.classList.add('wrong');}btns[q.ans].classList.add('correct');showToast(correct);setTimeout(()=>{hideToast();S.qIdx++;S.qIdx<S.qs.length?renderQ():showResult();},2100);}
-function showToast(ok){const pool=ok?FB_OK:FB_NO;const msg=pool[Math.floor(Math.random()*pool.length)];const el=document.getElementById('feedback-toast');el.textContent=msg;el.className='feedback-toast show '+(ok?'ok':'fail');el.style.animation='none';void el.offsetWidth;el.style.animation='toastIn 0.3s cubic-bezier(0.34,1.56,0.64,1) forwards';}
+
+function answer(idx,btn){
+  if(S.answered)return;
+  S.answered=true;
+  const q=S.qs[S.qIdx];
+  const correct=idx===q.ans;
+  const btns=document.querySelectorAll('.opt-btn');
+  btns.forEach(b=>b.disabled=true);
+  if(correct){btn.classList.add('correct');S.score++;document.getElementById('live-score').textContent=S.score;}
+  else{btn.classList.add('wrong');}
+  btns[q.ans].classList.add('correct');
+  showToast(correct);
+  setTimeout(()=>{hideToast();S.qIdx++;S.qIdx<S.qs.length?renderQ():showResult();},2100);
+}
+
+function showToast(ok){
+  const pool=ok?FB_OK:FB_NO;
+  const msg=pool[Math.floor(Math.random()*pool.length)];
+  const el=document.getElementById('feedback-toast');
+  el.textContent=msg;
+  el.className='feedback-toast show '+(ok?'ok':'fail');
+  el.style.animation='none';
+  void el.offsetWidth;
+  el.style.animation='toastIn 0.3s cubic-bezier(0.34,1.56,0.64,1) forwards';
+}
 function hideToast(){document.getElementById('feedback-toast').className='feedback-toast';}
-async function showResult(){const s=S.score,pct=Math.round(s/10*100),pts=s*10;document.getElementById('result-num').textContent=s;document.getElementById('res-cat').textContent=CAT_NAMES[S.cat];document.getElementById('res-correct').textContent=s+' / 10';document.getElementById('res-accuracy').textContent=pct+'%';document.getElementById('res-pts').textContent='+'+pts+' pts';let grade;if(s===10)grade='PERFECT! 🌟';else if(s>=8)grade='BRILLIANT ✨';else if(s>=6)grade='GREAT JOB 🎯';else if(s>=3)grade='GOOD EFFORT 💪';else grade='KEEP LEARNING 📚';document.getElementById('result-grade').textContent=grade;document.getElementById('result-quote').textContent=getResultQuote(s,S.nick);if(s>=8)confetti();const entry={nick:S.nick,score:s,cat:CAT_NAMES[S.cat],pts,day:dateStr()};saveLocal(entry);lbSave(entry);showScreen('result');}
-async function showLeaderboard(){showScreen('leaderboard');const list=document.getElementById('lb-list');const loading=document.getElementById('lb-loading');const sub=document.getElementById('lb-subtitle');list.innerHTML='';loading.style.display='block';let entries=null;if(S.jbKey&&S.jbId){entries=await lbFetch();sub.textContent=entries?'Live shared leaderboard 🌍':'Showing local scores';}if(!entries)entries=localLB;loading.style.display='none';if(!entries||!entries.length){list.innerHTML='<p style="text-align:center;color:var(--ink3);padding:1rem">No scores yet — be the first! 🚀</p>';return;}entries.slice(0,15).forEach((e,i)=>{const isMe=e.nick===S.nick;const row=document.createElement('div');row.className='lb-row'+(isMe?' me':'');row.style.animationDelay=i*0.05+'s';row.innerHTML='<div class="lb-rank">'+(i+1)+'</div><div style="flex:1;min-width:0"><span class="lb-nick">'+e.nick+(isMe?' <span style="font-size:0.7rem;color:var(--accent)">(you)</span>':'')+'</span><span class="lb-cat">'+e.cat+'</span></div><div class="lb-pts">'+e.pts+'pts</div>';list.appendChild(row);});}
-function confetti(){const w=document.getElementById('confetti');w.innerHTML='';const c=['#4F6EF7','#7B5FF5','#00C48C','#F5A623','#B0B8CC','#F04E37','#6EE7F7'];for(let i=0;i<60;i++){const d=document.createElement('div');d.className='c-dot';d.style.cssText='left:'+Math.random()*100+'%;background:'+c[Math.floor(Math.random()*c.length)]+';animation-duration:'+(1.8+Math.random()*2)+'s;animation-delay:'+Math.random()*0.5+'s;width:'+(6+Math.random()*8)+'px;height:'+(6+Math.random()*8)+'px;border-radius:'+(Math.random()>.5?'50%':'3px')+';opacity:0.85;';w.appendChild(d);}setTimeout(()=>w.innerHTML='',5000);}
+
+async function showResult(){
+  const s=S.score,pct=Math.round(s/10*100),pts=s*10;
+  document.getElementById('result-num').textContent=s;
+  document.getElementById('res-cat').textContent=CAT_NAMES[S.cat];
+  document.getElementById('res-correct').textContent=s+' / 10';
+  document.getElementById('res-accuracy').textContent=pct+'%';
+  document.getElementById('res-pts').textContent='+'+pts+' pts';
+  let grade;
+  if(s===10)grade='PERFECT! 🌟';
+  else if(s>=8)grade='BRILLIANT ✨';
+  else if(s>=6)grade='GREAT JOB 🎯';
+  else if(s>=3)grade='GOOD EFFORT 💪';
+  else grade='KEEP LEARNING 📚';
+  document.getElementById('result-grade').textContent=grade;
+  document.getElementById('result-quote').textContent=getResultQuote(s,S.nick);
+  if(s>=8)confetti();
+  const entry={nick:S.nick,score:s,cat:CAT_NAMES[S.cat],pts,day:dateStr()};
+  saveLocal(entry);
+  lbSave(entry); // fire-and-forget
+  showScreen('result');
+}
+
+function confetti(){
+  const w=document.getElementById('confetti');
+  w.innerHTML='';
+  const c=['#4F6EF7','#7B5FF5','#00C48C','#F5A623','#B0B8CC','#F04E37','#6EE7F7'];
+  for(let i=0;i<60;i++){
+    const d=document.createElement('div');
+    d.className='c-dot';
+    d.style.cssText='left:'+Math.random()*100+'%;background:'+c[Math.floor(Math.random()*c.length)]+';animation-duration:'+(1.8+Math.random()*2)+'s;animation-delay:'+Math.random()*0.5+'s;width:'+(6+Math.random()*8)+'px;height:'+(6+Math.random()*8)+'px;border-radius:'+(Math.random()>.5?'50%':'3px')+';opacity:0.85;';
+    w.appendChild(d);
+  }
+  setTimeout(()=>w.innerHTML='',5000);
+}
+
 document.getElementById('nick-input').addEventListener('keydown',e=>{if(e.key==='Enter')startFromHome();});
 
 // ═══════════════════════════════════════════════════
@@ -400,99 +632,52 @@ document.getElementById('nick-input').addEventListener('keydown',e=>{if(e.key===
 // ═══════════════════════════════════════════════════
 const L={
 openai:`<svg viewBox="0 0 100 100" style="width:88px;height:88px" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M92.7 41.5a24.6 24.6 0 00-2.1-20.2A24.8 24.8 0 0063.9 9.6a24.6 24.6 0 00-18.5-8.3A24.8 24.8 0 0021.7 17a24.6 24.6 0 00-16.4 11.9 24.8 24.8 0 003 28.6 24.6 24.6 0 002.1 20.2 24.8 24.8 0 0026.7 11.7 24.6 24.6 0 0018.5 8.3 24.8 24.8 0 0023.6-15.7 24.6 24.6 0 0016.4-11.9 24.8 24.8 0 00-2.9-28.6zM57.3 93.2a18.4 18.4 0 01-11.8-4.3l.6-.3 19.6-11.3a3.2 3.2 0 001.6-2.8V47l8.3 4.8v22.8a18.5 18.5 0 01-18.3 18.6zM15.3 76.2a18.4 18.4 0 01-2.2-12.4l.6.3 19.6 11.3a3.2 3.2 0 003.2 0l23.9-13.8v9.5L40.5 82.5a18.5 18.5 0 01-25.2-6.3zM9.9 32.8a18.4 18.4 0 019.6-8.1v23.2a3.2 3.2 0 001.6 2.8l23.9 13.8-8.3 4.8L17 57.6A18.5 18.5 0 019.9 32.8zm68.3 15.9l-23.9-13.8 8.3-4.8 19.7 11.4a18.5 18.5 0 01-2.9 33.4V51.5a3.2 3.2 0 00-1.2-2.8zm8.2-12.5l-.6-.3-19.6-11.3a3.2 3.2 0 00-3.2 0L39.1 38.4v-9.5l19.9-11.5a18.5 18.5 0 0127.4 19.3zM34.4 53.4l-8.3-4.8V25.8a18.5 18.5 0 0130.3-14.2l-.6.3-19.6 11.3a3.2 3.2 0 00-1.6 2.8l-.2 27.4zm4.5-9.7l10.6-6.1 10.6 6.1v12.2l-10.6 6.1-10.6-6.1V43.7z" fill="#000"/></svg>`,
-
 gemini:`<svg viewBox="0 0 80 80" style="width:88px;height:88px" fill="none" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="g1" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#4285F4"/><stop offset="40%" stop-color="#9C27B0"/><stop offset="100%" stop-color="#EA4335"/></linearGradient></defs><path d="M40 6 C40 6 45 32 66 40 C45 48 40 74 40 74 C40 74 35 48 14 40 C35 32 40 6 40 6Z" fill="url(#g1)"/></svg>`,
-
 meta:`<svg viewBox="0 0 220 80" style="width:140px;height:50px" fill="none" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="m1" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#0082FB"/><stop offset="100%" stop-color="#00B4FF"/></linearGradient></defs><path d="M18 52 C18 52 28 18 44 18 C55 18 62 34 62 34 C62 34 68 18 79 18 C95 18 104 52 104 52" stroke="url(#m1)" stroke-width="9" stroke-linecap="round" fill="none"/><text x="118" y="54" font-family="Arial,sans-serif" font-size="34" font-weight="900" fill="#0082FB" letter-spacing="-0.5">Meta</text></svg>`,
-
 mistral:`<svg viewBox="0 0 100 100" style="width:80px;height:80px" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="8" y="8" width="26" height="26" fill="#000"/><rect x="42" y="8" width="26" height="26" fill="#000"/><rect x="76" y="8" width="16" height="26" fill="#000"/><rect x="8" y="42" width="26" height="26" fill="#777"/><rect x="42" y="42" width="26" height="26" fill="#000"/><rect x="8" y="76" width="26" height="16" fill="#000"/><rect x="42" y="76" width="26" height="16" fill="#777"/><rect x="76" y="42" width="16" height="50" fill="#000"/></svg>`,
-
 huggingface:`<svg viewBox="0 0 100 100" style="width:88px;height:88px" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="46" fill="#FFD21E"/><circle cx="36" cy="44" r="6" fill="#1a1a1a"/><circle cx="64" cy="44" r="6" fill="#1a1a1a"/><path d="M33 64 Q50 78 67 64" stroke="#1a1a1a" stroke-width="4" stroke-linecap="round" fill="none"/><path d="M27 30 Q24 16 34 19" stroke="#FF6B35" stroke-width="3.5" stroke-linecap="round" fill="none"/><path d="M73 30 Q76 16 66 19" stroke="#FF6B35" stroke-width="3.5" stroke-linecap="round" fill="none"/></svg>`,
-
 midjourney:`<svg viewBox="0 0 100 90" style="width:100px;height:90px" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M50 8 L12 82 L36 82 L50 56 L64 82 L88 82 Z" fill="#000" stroke="none"/><ellipse cx="50" cy="80" rx="22" ry="5" fill="#000" opacity="0.1"/></svg>`,
-
 stability:`<svg viewBox="0 0 100 100" style="width:88px;height:88px" fill="none" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="st1" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#7C3AED"/><stop offset="100%" stop-color="#4338CA"/></linearGradient></defs><rect width="100" height="100" rx="22" fill="url(#st1)"/><rect x="18" y="26" width="64" height="11" rx="5.5" fill="white"/><rect x="18" y="44" width="48" height="11" rx="5.5" fill="white" opacity="0.75"/><rect x="18" y="62" width="32" height="11" rx="5.5" fill="white" opacity="0.45"/></svg>`,
-
 perplexity:`<svg viewBox="0 0 100 100" style="width:88px;height:88px" fill="none" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="px1" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#20B2AA"/><stop offset="100%" stop-color="#006060"/></linearGradient></defs><path d="M50 8 L50 92" stroke="url(#px1)" stroke-width="5.5" stroke-linecap="round"/><path d="M28 28 L50 8 L72 28" stroke="url(#px1)" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/><path d="M28 72 L50 92 L72 72" stroke="url(#px1)" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/><path d="M28 28 L28 72" stroke="url(#px1)" stroke-width="5.5" stroke-linecap="round"/><path d="M72 28 L72 72" stroke="url(#px1)" stroke-width="5.5" stroke-linecap="round"/><path d="M28 28 L72 72" stroke="url(#px1)" stroke-width="3.5" stroke-linecap="round" opacity="0.5"/><path d="M72 28 L28 72" stroke="url(#px1)" stroke-width="3.5" stroke-linecap="round" opacity="0.5"/></svg>`,
-
 copilot:`<svg viewBox="0 0 100 100" style="width:88px;height:88px" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="47" fill="#161B22"/><circle cx="50" cy="40" r="17" fill="#8B949E"/><circle cx="50" cy="40" r="11" fill="#161B22"/><circle cx="44" cy="38" r="3.5" fill="white"/><circle cx="56" cy="38" r="3.5" fill="white"/><path d="M33 62 Q50 76 67 62" stroke="#8B949E" stroke-width="4.5" stroke-linecap="round" fill="none"/><path d="M26 55 Q21 38 29 33" stroke="#8B949E" stroke-width="3.5" stroke-linecap="round" fill="none"/><path d="M74 55 Q79 38 71 33" stroke="#8B949E" stroke-width="3.5" stroke-linecap="round" fill="none"/></svg>`,
-
 elevenlabs:`<svg viewBox="0 0 100 80" style="width:100px;height:80px" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="8" y="20" width="14" height="40" rx="7" fill="#000"/><rect x="30" y="8" width="14" height="64" rx="7" fill="#000"/><rect x="52" y="26" width="14" height="28" rx="7" fill="#000"/><rect x="74" y="14" width="14" height="52" rx="7" fill="#000"/></svg>`,
-
 runway:`<svg viewBox="0 0 100 100" style="width:88px;height:88px" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="100" height="100" rx="14" fill="#0A0A0A"/><rect x="12" y="30" width="54" height="40" rx="5" fill="white"/><polygon points="70,30 92,50 70,70" fill="#00E87A"/></svg>`,
-
 nvidia:`<svg viewBox="0 0 200 70" style="width:160px;height:56px" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M10 44 L10 12 L28 12 L28 22 C28 22 38 12 52 12 L52 22 C40 22 28 30 28 44 Z" fill="#76B900"/><path d="M10 44 L10 54 L28 54 L28 44 Z" fill="#76B900"/><text x="62" y="48" font-family="Arial Black,sans-serif" font-size="28" font-weight="900" fill="#76B900" letter-spacing="0.5">NVIDIA</text></svg>`,
-
 cohere:`<svg viewBox="0 0 100 100" style="width:88px;height:88px" fill="none" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="co1" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#D97706"/><stop offset="100%" stop-color="#F59E0B"/></linearGradient></defs><circle cx="50" cy="50" r="42" stroke="url(#co1)" stroke-width="9" fill="none"/><circle cx="50" cy="50" r="24" fill="url(#co1)"/><circle cx="50" cy="50" r="11" fill="white"/></svg>`,
-
 xai:`<svg viewBox="0 0 100 100" style="width:88px;height:88px" fill="none" xmlns="http://www.w3.org/2000/svg"><line x1="14" y1="14" x2="86" y2="86" stroke="#000" stroke-width="13" stroke-linecap="round"/><line x1="86" y1="14" x2="14" y2="86" stroke="#000" stroke-width="13" stroke-linecap="round"/><circle cx="50" cy="50" r="9" fill="#000"/></svg>`,
-
 deepmind:`<svg viewBox="0 0 100 100" style="width:88px;height:88px" fill="none" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="dm1" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#1A73E8"/><stop offset="60%" stop-color="#4285F4"/><stop offset="100%" stop-color="#34A853"/></linearGradient></defs><circle cx="50" cy="50" r="40" stroke="url(#dm1)" stroke-width="8" fill="none"/><circle cx="50" cy="50" r="16" fill="url(#dm1)"/><path d="M50 36 L50 64 M36 50 L64 50" stroke="white" stroke-width="4" stroke-linecap="round"/></svg>`,
-
 suno:`<svg viewBox="0 0 100 100" style="width:88px;height:88px" fill="none" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="sn1" x1="0" y1="1" x2="0" y2="0"><stop offset="0%" stop-color="#EC4899"/><stop offset="100%" stop-color="#818CF8"/></linearGradient></defs><circle cx="50" cy="50" r="46" fill="url(#sn1)"/><circle cx="50" cy="50" r="18" fill="white"/><circle cx="50" cy="50" r="8" fill="url(#sn1)"/><path d="M70 30 Q86 50 70 70" stroke="white" stroke-width="4.5" stroke-linecap="round" fill="none"/><path d="M78 22 Q100 50 78 78" stroke="white" stroke-width="3" stroke-linecap="round" fill="none" opacity="0.5"/></svg>`,
-
 scale:`<svg viewBox="0 0 100 100" style="width:88px;height:88px" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="100" height="100" rx="20" fill="#F97316"/><text x="50%" y="68" text-anchor="middle" font-family="Arial Black,sans-serif" font-size="54" font-weight="900" fill="white">S</text></svg>`,
-
 adobe:`<svg viewBox="0 0 100 100" style="width:88px;height:88px" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="100" height="100" rx="14" fill="#FF0000"/><text x="50%" y="64" text-anchor="middle" font-family="Arial Black,sans-serif" font-size="40" font-weight="900" fill="white">Ai</text></svg>`,
-
 replicate:`<svg viewBox="0 0 100 100" style="width:88px;height:88px" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="100" height="100" rx="20" fill="#000"/><rect x="16" y="16" width="28" height="28" rx="5" fill="white"/><rect x="56" y="16" width="28" height="28" rx="5" fill="white" opacity="0.55"/><rect x="16" y="56" width="28" height="28" rx="5" fill="white" opacity="0.55"/><rect x="56" y="56" width="28" height="28" rx="5" fill="white" opacity="0.25"/></svg>`,
-
 claude_logo:`<svg viewBox="0 0 200 70" style="width:160px;height:56px" fill="none" xmlns="http://www.w3.org/2000/svg"><text x="50%" y="50" text-anchor="middle" font-family="Georgia,Times New Roman,serif" font-size="40" font-weight="700" fill="#CC785C" letter-spacing="-0.5">claude</text></svg>`,
-
 groq:`<svg viewBox="0 0 100 100" style="width:88px;height:88px" fill="none" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="gr1" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#F55036"/><stop offset="100%" stop-color="#FF8C00"/></linearGradient></defs><rect width="100" height="100" rx="22" fill="url(#gr1)"/><text x="50%" y="66" text-anchor="middle" font-family="Arial Black,sans-serif" font-size="38" font-weight="900" fill="white" letter-spacing="-1">groq</text></svg>`,
-
 cursor:`<svg viewBox="0 0 100 100" style="width:88px;height:88px" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="100" height="100" rx="22" fill="#000"/><polygon points="22,18 22,82 52,58 62,80 74,74 64,52 84,52" fill="white"/></svg>`,
-
 anthropic:`<svg viewBox="0 0 200 70" style="width:160px;height:56px" fill="none" xmlns="http://www.w3.org/2000/svg"><text x="50%" y="50" text-anchor="middle" font-family="Arial,sans-serif" font-size="26" font-weight="700" fill="#CC785C" letter-spacing="1">Anthropic</text></svg>`,
-
 pika:`<svg viewBox="0 0 100 100" style="width:88px;height:88px" fill="none" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="pk1" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#7C3AED"/><stop offset="100%" stop-color="#EC4899"/></linearGradient></defs><rect width="100" height="100" rx="22" fill="url(#pk1)"/><polygon points="32,28 32,72 76,50" fill="white"/><circle cx="76" cy="50" r="10" fill="white" opacity="0.3"/></svg>`,
-
 ideogram:`<svg viewBox="0 0 100 100" style="width:88px;height:88px" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="100" height="100" rx="22" fill="#000"/><circle cx="50" cy="42" r="20" stroke="white" stroke-width="7" fill="none"/><rect x="43" y="62" width="14" height="22" rx="7" fill="white"/></svg>`,
-
 luma:`<svg viewBox="0 0 100 100" style="width:88px;height:88px" fill="none" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="lu1" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#6366F1"/><stop offset="100%" stop-color="#8B5CF6"/></linearGradient></defs><rect width="100" height="100" rx="50" fill="url(#lu1)"/><text x="50%" y="66" text-anchor="middle" font-family="Arial Black,sans-serif" font-size="34" font-weight="900" fill="white">L</text></svg>`,
-
 udio:`<svg viewBox="0 0 100 100" style="width:88px;height:88px" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="100" height="100" rx="22" fill="#111"/><rect x="18" y="38" width="10" height="30" rx="5" fill="#A78BFA"/><rect x="36" y="26" width="10" height="54" rx="5" fill="#A78BFA"/><rect x="54" y="32" width="10" height="42" rx="5" fill="#A78BFA"/><rect x="72" y="44" width="10" height="18" rx="5" fill="#A78BFA"/></svg>`,
-
 mistral_word:`<svg viewBox="0 0 200 70" style="width:160px;height:56px" fill="none" xmlns="http://www.w3.org/2000/svg"><text x="50%" y="50" text-anchor="middle" font-family="Arial Black,sans-serif" font-size="32" font-weight="900" fill="#FF7000" letter-spacing="-0.5">Mistral</text></svg>`,
-
 together:`<svg viewBox="0 0 100 100" style="width:88px;height:88px" fill="none" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="tg1" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#3B82F6"/><stop offset="100%" stop-color="#8B5CF6"/></linearGradient></defs><rect width="100" height="100" rx="22" fill="url(#tg1)"/><circle cx="34" cy="50" r="12" fill="white"/><circle cx="66" cy="50" r="12" fill="white"/><rect x="34" y="44" width="32" height="12" fill="white"/></svg>`,
-
 google:`<svg viewBox="0 0 100 100" style="width:88px;height:88px" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="44" fill="white" stroke="#e0e0e0" stroke-width="1"/><path d="M50 50 L90 50 A40 40 0 0 0 50 10 Z" fill="#4285F4"/><path d="M50 50 L10 50 A40 40 0 0 0 28 81 Z" fill="#34A853"/><path d="M50 50 L28 81 A40 40 0 0 0 72 81 Z" fill="#FBBC05"/><path d="M50 50 L72 81 A40 40 0 0 0 90 50 Z" fill="#EA4335"/><circle cx="50" cy="50" r="16" fill="white"/></svg>`,
-
 microsoft:`<svg viewBox="0 0 100 100" style="width:88px;height:88px" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="8" y="8" width="40" height="40" fill="#F25022"/><rect x="52" y="8" width="40" height="40" fill="#7FBA00"/><rect x="8" y="52" width="40" height="40" fill="#00A4EF"/><rect x="52" y="52" width="40" height="40" fill="#FFB900"/></svg>`,
-
 amazon:`<svg viewBox="0 0 100 100" style="width:88px;height:88px" fill="none" xmlns="http://www.w3.org/2000/svg"><text x="50%" y="46" text-anchor="middle" font-family="Arial Black,sans-serif" font-size="22" font-weight="900" fill="#FF9900" letter-spacing="-0.5">amazon</text><path d="M22 62 Q50 78 78 62" stroke="#FF9900" stroke-width="4" stroke-linecap="round" fill="none"/><path d="M72 56 L80 62 L72 62" fill="#FF9900"/></svg>`,
-
 tesla:`<svg viewBox="0 0 100 100" style="width:88px;height:88px" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M50 20 L50 90" stroke="#E31937" stroke-width="6" stroke-linecap="round"/><path d="M20 20 L80 20" stroke="#E31937" stroke-width="6" stroke-linecap="round"/><path d="M20 20 Q20 35 50 20 Q80 35 80 20" stroke="#E31937" stroke-width="6" fill="none" stroke-linecap="round"/></svg>`,
-
 samsung:`<svg viewBox="0 0 200 70" style="width:160px;height:56px" fill="none" xmlns="http://www.w3.org/2000/svg"><text x="50%" y="50" text-anchor="middle" font-family="Arial,sans-serif" font-size="30" font-weight="700" fill="#1428A0" letter-spacing="-0.5">SAMSUNG</text></svg>`,
-
 inflection:`<svg viewBox="0 0 100 100" style="width:88px;height:88px" fill="none" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="inf1" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#6366F1"/><stop offset="100%" stop-color="#A78BFA"/></linearGradient></defs><rect width="100" height="100" rx="22" fill="url(#inf1)"/><path d="M30 70 Q50 20 70 70" stroke="white" stroke-width="7" fill="none" stroke-linecap="round"/></svg>`,
-
 ai21:`<svg viewBox="0 0 100 100" style="width:88px;height:88px" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="100" height="100" rx="22" fill="#1a1a2e"/><text x="50%" y="62" text-anchor="middle" font-family="Arial Black,sans-serif" font-size="32" font-weight="900" fill="white">AI21</text></svg>`,
-
 aleph:`<svg viewBox="0 0 100 100" style="width:88px;height:88px" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="100" height="100" rx="22" fill="#0f172a"/><text x="50%" y="65" text-anchor="middle" font-family="Georgia,serif" font-size="52" font-weight="700" fill="white">א</text></svg>`,
-
 cohere2:`<svg viewBox="0 0 200 70" style="width:160px;height:56px" fill="none" xmlns="http://www.w3.org/2000/svg"><text x="50%" y="50" text-anchor="middle" font-family="Arial,sans-serif" font-size="32" font-weight="700" fill="#D97706" letter-spacing="-0.5">Cohere</text></svg>`,
-
 weaviate:`<svg viewBox="0 0 100 100" style="width:88px;height:88px" fill="none" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="wv1" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#00C853"/><stop offset="100%" stop-color="#00897B"/></linearGradient></defs><rect width="100" height="100" rx="22" fill="url(#wv1)"/><polygon points="50,15 80,35 80,65 50,85 20,65 20,35" fill="none" stroke="white" stroke-width="6"/><polygon points="50,32 66,42 66,58 50,68 34,58 34,42" fill="white" opacity="0.4"/></svg>`,
-
 pinecone:`<svg viewBox="0 0 100 100" style="width:88px;height:88px" fill="none" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="pc1" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#1BFFB4"/><stop offset="100%" stop-color="#0D9488"/></linearGradient></defs><rect width="100" height="100" rx="22" fill="#0f172a"/><path d="M50 15 L50 85 M35 30 L50 15 L65 30 M35 50 L50 35 L65 50 M35 70 L50 55 L65 70" stroke="url(#pc1)" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>`,
-
 langchain:`<svg viewBox="0 0 100 100" style="width:88px;height:88px" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="100" height="100" rx="22" fill="#1C3A2F"/><circle cx="28" cy="50" r="10" fill="#2DD4BF"/><circle cx="72" cy="50" r="10" fill="#2DD4BF"/><path d="M38 50 L62 50" stroke="#2DD4BF" stroke-width="4" stroke-dasharray="5 3"/><circle cx="50" cy="30" r="10" fill="#2DD4BF" opacity="0.6"/><path d="M50 40 L50 40 M38 50 Q50 44 50 40" stroke="#2DD4BF" stroke-width="3" fill="none" stroke-dasharray="4 3"/><path d="M62 50 Q50 44 50 40" stroke="#2DD4BF" stroke-width="3" fill="none" stroke-dasharray="4 3"/></svg>`,
-
-weights_biases:`<svg viewBox="0 0 100 100" style="width:88px;height:88px" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="100" height="100" rx="22" fill="#FFBE00"/><text x="50%" y="58" text-anchor="middle" font-family="Arial Black,sans-serif" font-size="34" font-weight="900" fill="#1a1a1a">W&B</text></svg>`,
-
+weights_biases:`<svg viewBox="0 0 100 100" style="width:88px;height:88px" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="100" height="100" rx="22" fill="#FFBE00"/><text x="50%" y="58" text-anchor="middle" font-family="Arial Black,sans-serif" font-size="34" font-weight="900" fill="#1a1a1a">W&amp;B</text></svg>`,
 databricks:`<svg viewBox="0 0 100 100" style="width:88px;height:88px" fill="none" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="db1" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#FF3621"/><stop offset="100%" stop-color="#FF8C00"/></linearGradient></defs><rect width="100" height="100" rx="22" fill="url(#db1)"/><polygon points="50,18 76,33 76,50 50,65 24,50 24,33" fill="none" stroke="white" stroke-width="5"/><polygon points="50,35 62,42 62,58 50,65 38,58 38,42" fill="white" opacity="0.5"/></svg>`,
-
 snowflake:`<svg viewBox="0 0 100 100" style="width:88px;height:88px" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="100" height="100" rx="22" fill="#29B5E8"/><line x1="50" y1="15" x2="50" y2="85" stroke="white" stroke-width="5" stroke-linecap="round"/><line x1="15" y1="50" x2="85" y2="50" stroke="white" stroke-width="5" stroke-linecap="round"/><line x1="22" y1="22" x2="78" y2="78" stroke="white" stroke-width="5" stroke-linecap="round"/><line x1="78" y1="22" x2="22" y2="78" stroke="white" stroke-width="5" stroke-linecap="round"/><circle cx="50" cy="50" r="8" fill="white"/></svg>`,
-
 notion:`<svg viewBox="0 0 100 100" style="width:88px;height:88px" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="100" height="100" rx="22" fill="#fff" stroke="#e0e0e0" stroke-width="2"/><path d="M25 22 L25 78 L48 78 L48 22 Z" fill="#1a1a1a"/><path d="M48 22 L75 55 L75 78 L48 78 Z" fill="#1a1a1a"/></svg>`,
-
 canva:`<svg viewBox="0 0 100 100" style="width:88px;height:88px" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="46" fill="#00C4CC"/><text x="50%" y="66" text-anchor="middle" font-family="Arial Black,sans-serif" font-size="46" font-weight="900" fill="white">C</text></svg>`,
-
 salesforce:`<svg viewBox="0 0 100 100" style="width:88px;height:88px" fill="none" xmlns="http://www.w3.org/2000/svg"><ellipse cx="50" cy="55" rx="42" ry="32" fill="#00A1E0"/><ellipse cx="30" cy="42" rx="18" ry="18" fill="#00A1E0"/><ellipse cx="62" cy="36" rx="22" ry="22" fill="#00A1E0"/><ellipse cx="78" cy="50" rx="16" ry="16" fill="#00A1E0"/></svg>`,
-
 };
 
 // ═══════════════════════════════════════════════════════
@@ -601,33 +786,6 @@ history:[
   {q:"Which year was the first ImageNet Large Scale Visual Recognition Challenge (ILSVRC) held?",opts:["2008","2010","2012","2014"],ans:1},
   {q:"Ilya Sutskever co-founded which AI safety lab after departing OpenAI in 2024?",opts:["Anthropic","Safe Superintelligence Inc (SSI)","xAI","Reflection AI"],ans:1},
   {q:"The 'scaling hypothesis' — that bigger models always get smarter — is most associated with:",opts:["Yann LeCun","Jared Kaplan","Sam Altman","Demis Hassabis"],ans:1},
-  {q:"What was the name of the first AI program to defeat a world champion at checkers (1994)?",opts:["Deep Blue","Chinook","TD-Gammon","Stockfish"],ans:1},
-  {q:"The 2021 paper 'On the Opportunities and Risks of Foundation Models' came from which university?",opts:["MIT","Oxford","Stanford","Carnegie Mellon"],ans:2},
-  {q:"OpenAI's Codex — which powered GitHub Copilot — was built on which base model?",opts:["GPT-2","GPT-3","GPT-3.5","GPT-4"],ans:1},
-  {q:"Which country launched the world's first national AI strategy in 2017?",opts:["USA","China","Canada","UK"],ans:2},
-  {q:"Marvin Minsky and John McCarthy founded which AI lab at MIT in 1959?",opts:["AI Now Institute","MIT CSAIL","MIT AI Lab","MIT Media Lab"],ans:2},
-  {q:"The word2vec algorithm — which taught machines word meaning via vectors — came from:",opts:["OpenAI","Facebook AI","Google","Microsoft Research"],ans:2},
-  {q:"Which model first demonstrated strong 'in-context learning' at scale in 2020?",opts:["BERT","T5","GPT-3","RoBERTa"],ans:2},
-  {q:"OpenAI's first product before ChatGPT was a coding tool. What was it?",opts:["Copilot","Codex","OpenAI Playground","DALL-E"],ans:1},
-  {q:"Which European AI lab created the BLOOM open-source multilingual LLM in 2022?",opts:["Mistral AI","Aleph Alpha","BigScience","LAION"],ans:2},
-  {q:"The 'Alignment Forum' — where AI safety research is shared — was founded by which organisation?",opts:["Anthropic","Machine Intelligence Research Institute (MIRI)","OpenAI","DeepMind"],ans:1},
-  {q:"Google's LaMDA chatbot gained public attention in 2022 when an engineer claimed it was:",opts:["Better than GPT-3","Sentient","Capable of coding","Smarter than humans"],ans:1},
-  {q:"Meta's first LLaMA model (LLaMA 1) was released in which year?",opts:["2022","2023","2024","2025"],ans:1},
-  {q:"Which reinforcement learning milestone involved an AI learning to play Atari games from raw pixels?",opts:["AlphaGo","DQN by DeepMind","AlphaStar","OpenAI Five"],ans:1},
-  {q:"OpenAI's first GPT model (GPT-1) was released in which year?",opts:["2016","2017","2018","2019"],ans:2},
-  {q:"Which AI safety concept describes an AI pursuing instrumental goals not intended by its creators?",opts:["Goal misgeneralisation","Instrumental convergence","Reward hacking","Mesa-optimisation"],ans:1},
-  {q:"The 'Turing Test' was originally described in a paper called:",opts:["Computing Machinery and Intelligence","Can Machines Think?","The Imitation Game","Intelligent Machinery"],ans:0},
-  {q:"Which Chinese tech giant released the Ernie Bot LLM to compete with ChatGPT?",opts:["Alibaba","Baidu","Tencent","ByteDance"],ans:1},
-  {q:"OpenAI's nonprofit was founded in which year?",opts:["2013","2015","2017","2019"],ans:1},
-  {q:"The paper introducing BERT was titled:",opts:["Pre-training of Deep Bidirectional Transformers","BERT: Bidirectional Encoder Representations from Transformers","Deep Language Understanding","Bidirectional Attention for NLP"],ans:1},
-  {q:"Which AI lab published the 'Sparks of AGI' paper about GPT-4 in 2023?",opts:["OpenAI","Google Brain","Microsoft Research","DeepMind"],ans:2},
-  {q:"Stable Diffusion was released by Stability AI in partnership with which academic group?",opts:["MIT CSAIL","Stanford HAI","CompVis at LMU Munich","Oxford VGG"],ans:2},
-  {q:"The 'Godfather of AI' Geoffrey Hinton left Google in 2023 to speak freely about:",opts:["AI's economic benefits","AI existential risks","AI regulation","AI bias"],ans:1},
-  {q:"Which AI defeated top human players at the strategy game StarCraft II in 2019?",opts:["OpenAI Five","AlphaGo","AlphaStar","MuZero"],ans:2},
-  {q:"Apple's Siri — one of the first mainstream AI assistants — launched in which year?",opts:["2009","2011","2013","2015"],ans:1},
-  {q:"The famous 'No Free Lunch' theorem in machine learning states:",opts:["All models perform equally well averaged across all problems","Larger models always outperform smaller ones","Data quality beats data quantity","Compute is the only bottleneck"],ans:0},
-  {q:"Which year did Amazon launch Alexa?",opts:["2012","2014","2016","2018"],ans:1},
-  {q:"The 'Mixture of Experts' architecture was popularised at massive scale by which 2024 model?",opts:["GPT-4","Gemini Ultra","Mixtral 8x7B","Claude 3"],ans:2},
 ],
 
 concepts:[
@@ -736,7 +894,6 @@ tools:[
   {q:"Adobe Firefly is trained on which type of data to avoid copyright issues?",opts:["All publicly available internet images","Licensed and public-domain content only","Only images users upload","Synthetically generated data"],ans:1},
   {q:"Otter.ai is designed specifically for:",opts:["Generating images from text","Transcribing and summarising meetings and conversations","Writing legal documents","Managing support tickets"],ans:1},
   {q:"Which AI tool is specifically designed for automated business workflows without writing code?",opts:["Notion AI","Zapier AI","ElevenLabs","Perplexity"],ans:1},
-  {q:"Which company created the 'Gemma' family of lightweight open AI models?",opts:["Meta","Microsoft","Google","Mistral AI"],ans:2},
   {q:"Claude's 'Projects' feature allows users to:",opts:["Create shareable public chatbots","Maintain persistent memory and context across multiple conversations","Run Claude on local hardware","Schedule automated AI tasks"],ans:1},
   {q:"Which AI tool is built into Microsoft Edge browser natively?",opts:["ChatGPT","Gemini","Copilot","Claude"],ans:2},
   {q:"Google's AI-powered search feature that summarises results at the top is called:",opts:["Google Bard","AI Overviews","Search Generative Experience","Gemini Search"],ans:1},
