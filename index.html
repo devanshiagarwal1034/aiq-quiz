@@ -250,10 +250,13 @@ h1.hero .accent{background:linear-gradient(135deg,var(--accent),var(--accent2));
   <div style="text-align:center;margin-bottom:1.4rem;animation:fadeDown 0.4s ease both">
     <div class="wordmark"><div class="wordmark-dot"></div>AIQ</div>
     <h1 class="hero" style="font-size:2rem">🏆 <span class="accent">Leaderboard</span></h1>
-    <p class="hero-sub" id="lb-subtitle">Today's top players</p>
   </div>
   <div style="width:100%;max-width:520px" class="au">
-    <div class="sec-label">Rankings</div>
+    <div style="display:flex;gap:0.5rem;margin-bottom:1.1rem;">
+      <button id="lb-tab-today" onclick="switchLbTab('today')" class="btn" style="flex:1;justify-content:center;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;border-radius:50px;font-size:0.85rem;padding:0.65rem;">📅 Today</button>
+      <button id="lb-tab-alltime" onclick="switchLbTab('alltime')" class="btn btn-outline" style="flex:1;justify-content:center;border-radius:50px;font-size:0.85rem;padding:0.65rem;">🏅 All Time</button>
+    </div>
+    <div class="sec-label" id="lb-subtitle">Today's top players</div>
     <div id="lb-list"></div>
     <div id="lb-loading" style="display:none"><div class="spinner"></div></div>
     <div class="divider"></div>
@@ -280,14 +283,75 @@ function getDailyQuestions(cat){
 }
 const JB='https://api.jsonbin.io/v3';
 async function lbFetch(){if(!S.jbKey||!S.jbId)return null;try{const r=await fetch(`${JB}/b/${S.jbId}/latest`,{headers:{'X-Master-Key':S.jbKey}});if(!r.ok)return null;return(await r.json()).record?.entries||[];}catch{return null;}}
-async function lbSave(e){if(!S.jbKey||!S.jbId)return;try{const cur=await lbFetch()||[];cur.push(e);cur.sort((a,b)=>b.pts-a.pts||b.score-a.score);await fetch(`${JB}/b/${S.jbId}`,{method:'PUT',headers:{'Content-Type':'application/json','X-Master-Key':S.jbKey},body:JSON.stringify({entries:cur.slice(0,50)})});}catch(e){}}
+async function lbSave(e){if(!S.jbKey||!S.jbId)return;try{const cur=await lbFetch()||[];cur.push(e);cur.sort((a,b)=>b.pts-a.pts||b.score-a.score);await fetch(`${JB}/b/${S.jbId}`,{method:'PUT',headers:{'Content-Type':'application/json','X-Master-Key':S.jbKey},body:JSON.stringify({entries:cur.slice(0,200)})});}catch(e){}}
 let localLB=JSON.parse(localStorage.getItem('aiku_lb')||'[]');
-function saveLocal(e){localLB.push(e);localLB.sort((a,b)=>b.pts-a.pts||b.score-a.score);localLB=localLB.slice(0,30);localStorage.setItem('aiku_lb',JSON.stringify(localLB));}
+function saveLocal(e){localLB.push(e);localLB.sort((a,b)=>b.pts-a.pts||b.score-a.score);localLB=localLB.slice(0,100);localStorage.setItem('aiku_lb',JSON.stringify(localLB));}
+let lbAllEntries=[];
+let lbCurrentTab='today';
+function switchLbTab(tab){
+  lbCurrentTab=tab;
+  const todayBtn=document.getElementById('lb-tab-today');
+  const alltimeBtn=document.getElementById('lb-tab-alltime');
+  if(tab==='today'){
+    todayBtn.style.background='linear-gradient(135deg,var(--accent),var(--accent2))';todayBtn.style.color='#fff';todayBtn.classList.remove('btn-outline');
+    alltimeBtn.style.background='transparent';alltimeBtn.style.color='var(--ink2)';alltimeBtn.classList.add('btn-outline');
+    document.getElementById('lb-subtitle').textContent="Today's top players";
+  } else {
+    alltimeBtn.style.background='linear-gradient(135deg,var(--accent),var(--accent2))';alltimeBtn.style.color='#fff';alltimeBtn.classList.remove('btn-outline');
+    todayBtn.style.background='transparent';todayBtn.style.color='var(--ink2)';todayBtn.classList.add('btn-outline');
+    document.getElementById('lb-subtitle').textContent='All-time top players';
+  }
+  renderLbList(lbAllEntries,tab);
+}
+function renderLbList(entries,tab){
+  const list=document.getElementById('lb-list');
+  list.innerHTML='';
+  const today=dateStr();
+  const filtered=tab==='today'?entries.filter(e=>e.day===today):entries;
+  const sorted=[...filtered].sort((a,b)=>b.pts-a.pts||b.score-a.score).slice(0,15);
+  if(!sorted.length){list.innerHTML='<p style="text-align:center;color:var(--ink3);padding:1rem">'+(tab==='today'?'No scores today yet — be the first! 🚀':'No scores yet — be the first! 🚀')+'</p>';return;}
+  sorted.forEach((e,i)=>{
+    const isMe=e.nick===S.nick;
+    const row=document.createElement('div');
+    row.className='lb-row'+(isMe?' me':'');
+    row.style.animationDelay=i*0.05+'s';
+    row.innerHTML='<div class="lb-rank">'+(i+1)+'</div><div style="flex:1;min-width:0"><span class="lb-nick">'+e.nick+(isMe?' <span style="font-size:0.7rem;color:var(--accent)">(you)</span>':'')+'</span><span class="lb-cat">'+e.cat+(tab==='alltime'&&e.day?' · '+e.day:'')+'</span></div><div class="lb-pts">'+e.pts+'pts</div>';
+    list.appendChild(row);
+  });
+}
+async function showLeaderboard(){
+  showScreen('leaderboard');
+  lbCurrentTab='today';
+  switchLbTab('today');
+  const loading=document.getElementById('lb-loading');
+  document.getElementById('lb-list').innerHTML='';
+  loading.style.display='block';
+  let entries=null;
+  if(S.jbKey&&S.jbId){entries=await lbFetch();}
+  lbAllEntries=entries||localLB;
+  loading.style.display='none';
+  renderLbList(lbAllEntries,'today');
+}
 const FB_OK=["✅ Nailed it!","🔥 You knew!","⭐ Spot on!","🎯 Correct!","🤩 Boom!","✨ Perfect!","💡 Yes!","🏆 On fire!","🌟 Brilliant!","🎉 Exactly right!","🚀 Got it!","😎 Easy work!","💎 Flawless!","🧬 Sharp brain!","⚡ Instant recall!"];
 const FB_NO=["❌ Not quite!","😬 Nope!","💀 Wrong one!","🧠 Close miss!","😅 Nearly there!","🤖 Error detected!","📚 Learn that!","😤 Not it!","🌱 Keep going!","💪 Try harder!","🎭 Bold miss!","😂 Nah!","🫠 Wrong!","🐦 Not quite!","🔮 Off target!"];
 function getResultQuote(score,nick){const r=n=>Math.floor(Math.random()*n);if(score===10)return[`${nick}, you are built different. You might literally BE the training data.`,`Flawless, ${nick}! Turing would be proud. Or jealous.`,`10/10?! ${nick}, are you a GPT wrapper with a human-shaped username?`,`${nick} = 100% accuracy. Silicon Valley would like to acquire you.`][r(4)];if(score>=8)return[`Almost perfect, ${nick}! Those ${10-score} misses slipped like hallucinated facts.`,`Solid work, ${nick}. You clearly know your AI.`,`${nick}, the leaderboard trembles in your presence.`,`${nick}, 8–9 is the 'I read the papers' score. Respect.`][r(4)];if(score>=6)return[`Not bad, ${nick}! You passed the vibe check.`,`${nick}, 6–7 is the "AI Twitter expert" score. Go deeper!`,`You're in the middle of the bell curve, ${nick}. Time to escape it.`,`${nick}, you know enough to sound smart at parties.`][r(4)];if(score>=3)return[`${nick}, the AI revolution will not wait. Study up! 📚`,`Welp, ${nick}. At least you tried harder than most enterprise AI.`,`${nick}, that score is... a starting point. A humble one.`,`${nick}, even a random generator gets 2.5/10. You beat it. Slightly.`][r(4)];return[`${nick}, this score is proof AI education is urgently needed.`,`Rough one, ${nick}. Nowhere to go but up. Statistically.`,`${nick}, we believe in you. Not based on this quiz, but in general.`,`${nick}, a coin flip gets 5/10. But coins can't learn. You can.`][r(4)];}
 function showScreen(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById('screen-'+id).classList.add('active');document.getElementById('bottom-nav').style.display=['categories','quiz','result','leaderboard'].includes(id)?'flex':'none';['play','home','board'].forEach(n=>document.getElementById('nav-'+n).classList.remove('active'));if(id==='categories')document.getElementById('nav-play').classList.add('active');if(id==='home')document.getElementById('nav-home').classList.add('active');if(id==='leaderboard')document.getElementById('nav-board').classList.add('active');window.scrollTo(0,0);}
 function goCategories(){if(!S.nick){showScreen('home');return;}updateStreak();document.getElementById('streak-num').textContent=S.streak;document.getElementById('today-date').textContent=dateStr();showScreen('categories');}
+
+// ── Midnight auto-refresh ─────────────────────────────
+function scheduleMidnightRefresh(){
+  const now=new Date();
+  const msUntilMidnight=new Date(now.getFullYear(),now.getMonth(),now.getDate()+1,0,0,5).getTime()-now.getTime();
+  setTimeout(()=>{
+    // Refresh date badge and streak display if on categories screen
+    document.getElementById('today-date').textContent=dateStr();
+    document.getElementById('streak-num').textContent=S.streak;
+    // Regenerate questions by resetting category state so next startQuiz uses new seed
+    S.qs=[];
+    scheduleMidnightRefresh(); // schedule next midnight
+  },msUntilMidnight);
+}
+scheduleMidnightRefresh();
 function startFromHome(){const nick=document.getElementById('nick-input').value.trim();if(!nick){const i=document.getElementById('nick-input');i.style.borderColor='var(--red)';i.style.boxShadow='0 0 0 3px rgba(240,78,55,0.12)';i.placeholder='A nickname! Any name. Even just "Bob".';setTimeout(()=>{i.style.borderColor='';i.style.boxShadow='';i.placeholder='Enter a nickname to get started...';},2200);return;}S.nick=nick;goCategories();}
 function toggleSetup(){}
 function updateStreak(){const today=dateStr();if(S.lastDay===today)return;const yesterday=new Date(Date.now()-86400000).toISOString().split('T')[0];S.streak=(S.lastDay===yesterday)?S.streak+1:1;S.lastDay=today;localStorage.setItem('aiku_streak',S.streak);localStorage.setItem('aiku_last',today);}
